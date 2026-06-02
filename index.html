@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<title>Hub Acadêmico · Computação UFBA</title>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "outline-variant": "#c5c6d2",
+          "on-surface": "#1a1c19",
+          "surface-bright": "#fafaf5",
+          "primary-container": "#002366",
+          "surface-variant": "#e3e3de",
+          "surface-container-highest": "#e3e3de",
+          "error": "#ba1a1a",
+          "on-secondary": "#ffffff",
+          "on-primary": "#ffffff",
+          "secondary-container": "#fe5f6b",
+          "primary": "#00113a",
+          "surface-container-lowest": "#ffffff",
+          "surface-container-low": "#f4f4ef",
+          "on-tertiary": "#ffffff",
+          "on-error": "#ffffff",
+          "on-primary-container": "#758dd5",
+          "inverse-on-surface": "#f1f1ec",
+          "surface-container": "#eeeee9",
+          "surface-container-high": "#e8e8e3",
+          "secondary-fixed": "#ffdad9",
+          "on-surface-variant": "#444650",
+          "tertiary": "#6c5e06",
+          "surface": "#fafaf5",
+          "secondary": "#b22738",
+          "outline": "#757682",
+          "background": "#fafaf5"
+        },
+        fontFamily: {
+          "headline": ["Noto Serif", "serif"],
+          "body": ["Work Sans", "sans-serif"],
+          "label": ["Work Sans", "sans-serif"]
+        },
+        borderRadius: {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  }
+  body {
+    background-color: #fafaf5;
+    color: #1a1c19;
+    font-family: 'Work Sans', sans-serif;
+  }
+  h1, h2, h3, h4 { font-family: 'Noto Serif', serif; }
+  nav {
+    background: rgba(250,250,245,.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+  .disc-card {
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+    border: 1px solid rgba(197,198,210,0.4);
+  }
+  .disc-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 48px rgba(26,28,25,0.1);
+  }
+  .disc-card-soon {
+    border: 1px solid rgba(197,198,210,0.25);
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: #f4f4ef; }
+  ::-webkit-scrollbar-thumb { background: #c5c6d2; border-radius: 3px; }
+  html { scroll-behavior: smooth; }
+</style>
+</head>
+<body class="bg-background text-on-surface">
+
+<!-- ══════════════════ NAV ══════════════════ -->
+<nav class="fixed top-0 w-full z-50 border-b border-outline-variant/20">
+  <div class="flex justify-between items-center px-6 md:px-8 py-4 max-w-7xl mx-auto">
+    <div class="font-headline font-bold text-xl text-primary">
+      Hub <span class="text-secondary italic font-normal">Acadêmico</span>
+    </div>
+    <div class="hidden md:flex gap-8 items-center">
+      <a class="text-on-surface-variant hover:text-primary transition-colors font-headline text-base tracking-tight" href="#disciplinas">Disciplinas</a>
+      <a class="text-on-surface-variant hover:text-primary transition-colors font-headline text-base tracking-tight" href="#sobre">Sobre</a>
+    </div>
+  </div>
+</nav>
+
+<main class="pt-20">
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<section class="min-h-[560px] flex items-center px-6 md:px-8 max-w-7xl mx-auto py-20">
+  <div class="w-full max-w-3xl">
+    <span class="text-tertiary uppercase tracking-[0.18em] font-label font-medium text-xs mb-5 block">
+      Ciência da Computação · UFBA
+    </span>
+
+    <h1 class="text-[2.6rem] sm:text-[3.2rem] md:text-[4rem] font-headline font-bold text-primary leading-[1.06] mb-6">
+      Hub Acadêmico<br/>
+      <span class="text-secondary italic">de Computação</span>
+    </h1>
+
+    <p class="text-base text-on-surface-variant font-body leading-relaxed mb-10 max-w-xl">
+      Portal centralizado de disciplinas com conteúdo teórico, referências rápidas e simuladores interativos. Escolha uma disciplina para começar.
+    </p>
+
+    <a href="#disciplinas" class="bg-primary text-on-primary px-7 py-3.5 rounded-lg font-body font-semibold inline-flex items-center gap-2 hover:scale-[1.02] transition-transform text-sm">
+      Ver Disciplinas
+      <span class="material-symbols-outlined text-base">arrow_downward</span>
+    </a>
+  </div>
+</section>
+
+
+<!-- ══════════════════ DISCIPLINAS ══════════════════ -->
+<section class="py-24 bg-surface-container-low" id="disciplinas">
+  <div class="max-w-7xl mx-auto px-8">
+
+    <div class="mb-16">
+      <span class="text-tertiary uppercase tracking-widest text-xs font-label font-bold">Módulos Disponíveis</span>
+      <h2 class="text-4xl font-headline text-primary mt-2">Disciplinas</h2>
+      <p class="text-on-surface-variant mt-3 font-body">Clique em uma disciplina para acessar seu conteúdo e ferramentas.</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- PSB -->
+      <a href="psb/index.html" class="disc-card group block bg-surface-container-lowest rounded-xl overflow-hidden">
+        <div class="h-2 bg-gradient-to-r from-primary to-primary-container"></div>
+        <div class="p-8">
+          <div class="flex items-start justify-between mb-6">
+            <div class="w-12 h-12 bg-primary/8 rounded-xl flex items-center justify-center">
+              <span class="material-symbols-outlined text-2xl text-primary">memory</span>
+            </div>
+            <span class="text-xs bg-surface-container text-on-surface-variant px-2 py-1 rounded-full font-label flex items-center gap-1">
+              <span class="w-1.5 h-1.5 bg-tertiary rounded-full"></span>
+              Disponível
+            </span>
+          </div>
+          <h3 class="text-2xl font-headline text-primary mb-3">PSB</h3>
+          <p class="text-on-surface-variant text-sm leading-relaxed mb-3 font-body">
+            Programação de Software Básico
+          </p>
+          <p class="text-on-surface-variant text-sm leading-relaxed mb-8 font-body">
+            Arquitetura AVR, linguagem Assembly, registradores, instruções e simulação com SimulIDE.
+          </p>
+          <div class="flex items-center gap-3 flex-wrap mb-8">
+            <span class="text-xs bg-primary/8 text-primary px-2 py-1 rounded-full font-label">Assembly AVR</span>
+            <span class="text-xs bg-secondary/10 text-secondary px-2 py-1 rounded-full font-label">ATmega328P</span>
+            <span class="text-xs bg-tertiary/10 text-tertiary px-2 py-1 rounded-full font-label">SimulIDE</span>
+          </div>
+          <div class="flex items-center text-primary text-sm font-label font-bold gap-1 group-hover:gap-2 transition-all">
+            Acessar disciplina
+            <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Sistemas Operacionais -->
+      <a href="so/index.html" class="disc-card group block bg-surface-container-lowest rounded-xl overflow-hidden">
+        <div class="h-2 bg-gradient-to-r from-secondary to-secondary-container"></div>
+        <div class="p-8">
+          <div class="flex items-start justify-between mb-6">
+            <div class="w-12 h-12 bg-secondary/8 rounded-xl flex items-center justify-center">
+              <span class="material-symbols-outlined text-2xl text-secondary">dns</span>
+            </div>
+            <span class="text-xs bg-surface-container text-on-surface-variant px-2 py-1 rounded-full font-label flex items-center gap-1">
+              <span class="w-1.5 h-1.5 bg-tertiary rounded-full"></span>
+              Disponível
+            </span>
+          </div>
+          <h3 class="text-2xl font-headline text-primary mb-3">Sistemas Operacionais</h3>
+          <p class="text-on-surface-variant text-sm leading-relaxed mb-3 font-body">
+            Gerenciamento de recursos computacionais
+          </p>
+          <p class="text-on-surface-variant text-sm leading-relaxed mb-8 font-body">
+            Processos, threads, escalonamento de CPU, gerência de memória e sistemas de arquivos.
+          </p>
+          <div class="flex items-center gap-3 flex-wrap mb-8">
+            <span class="text-xs bg-primary/8 text-primary px-2 py-1 rounded-full font-label">Processos</span>
+            <span class="text-xs bg-secondary/10 text-secondary px-2 py-1 rounded-full font-label">Escalonamento</span>
+            <span class="text-xs bg-tertiary/10 text-tertiary px-2 py-1 rounded-full font-label">Simulador</span>
+          </div>
+          <div class="flex items-center text-primary text-sm font-label font-bold gap-1 group-hover:gap-2 transition-all">
+            Acessar disciplina
+            <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Em breve: Estruturas de Dados -->
+      <div class="disc-card-soon block bg-surface-container-lowest rounded-xl overflow-hidden">
+        <div class="h-2 bg-surface-container-high"></div>
+        <div class="p-8">
+          <div class="flex items-start justify-between mb-6">
+            <div class="w-12 h-12 bg-surface-container-high rounded-xl flex items-center justify-center">
+              <span class="material-symbols-outlined text-2xl text-outline">account_tree</span>
+            </div>
+            <span class="text-xs bg-surface-container text-on-surface-variant px-2 py-1 rounded-full font-label">Em breve</span>
+          </div>
+          <h3 class="text-2xl font-headline text-on-surface-variant mb-3">Estruturas de Dados</h3>
+          <p class="text-on-surface-variant text-sm leading-relaxed mb-8 font-body">
+            Listas, filas, pilhas, árvores AVL, grafos e tabelas hash com simuladores visuais interativos.
+          </p>
+          <div class="flex items-center gap-3 flex-wrap mb-8">
+            <span class="text-xs bg-surface-container text-on-surface-variant px-2 py-1 rounded-full font-label">Árvores</span>
+            <span class="text-xs bg-surface-container text-on-surface-variant px-2 py-1 rounded-full font-label">Grafos</span>
+            <span class="text-xs bg-surface-container text-on-surface-variant px-2 py-1 rounded-full font-label">Simulador</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Em breve: Redes de Computadores -->
+      <div class="disc-card-soon block bg-surface-container-lowest rounded-xl overflow-hidden">
+        <div class="h-2 bg-surface-container-high"></div>
+        <div class="p-8">
+          <div class="flex items-start justify-between mb-6">
+            <div class="w-12 h-12 bg-surface-container-high rounded-xl flex items-center justify-center">
+              <span class="material-symbols-outlined text-2xl text-outline">lan</span>
+            </div>
+            <span class="text-xs bg-surface-container text-on-surface-variant px-2 py-1 rounded-full font-label">Em breve</span>
+          </div>
+          <h3 class="text-2xl font-headline text-on-surface-variant mb-3">Redes de Computadores</h3>
+          <p class="text-on-surface-variant text-sm leading-relaxed mb-8 font-body">
+            Modelo OSI, TCP/IP, roteamento, protocolos de transporte e aplicações de rede.
+          </p>
+          <div class="flex items-center gap-3 flex-wrap mb-8">
+            <span class="text-xs bg-surface-container text-on-surface-variant px-2 py-1 rounded-full font-label">TCP/IP</span>
+            <span class="text-xs bg-surface-container text-on-surface-variant px-2 py-1 rounded-full font-label">OSI</span>
+            <span class="text-xs bg-surface-container text-on-surface-variant px-2 py-1 rounded-full font-label">Protocolos</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Em breve: Arquitetura de Computadores -->
+      <div class="disc-card-soon block bg-surface-container-lowest rounded-xl overflow-hidden">
+        <div class="h-2 bg-surface-container-high"></div>
+        <div class="p-8">
+          <div class="flex items-start justify-between mb-6">
+            <div class="w-12 h-12 bg-surface-container-high rounded-xl flex items-center justify-center">
+              <span class="material-symbols-outlined text-2xl text-outline">developer_board</span>
+            </div>
+            <span class="text-xs bg-surface-container text-on-surface-variant px-2 py-1 rounded-full font-label">Em breve</span>
+          </div>
+          <h3 class="text-2xl font-headline text-on-surface-variant mb-3">Arquitetura de Computadores</h3>
+          <p class="text-on-surface-variant text-sm leading-relaxed mb-8 font-body">
+            Pipeline, hierarquia de memória, RISC vs CISC e organização de CPUs modernas.
+          </p>
+          <div class="flex items-center gap-3 flex-wrap mb-8">
+            <span class="text-xs bg-surface-container text-on-surface-variant px-2 py-1 rounded-full font-label">Pipeline</span>
+            <span class="text-xs bg-surface-container text-on-surface-variant px-2 py-1 rounded-full font-label">Cache</span>
+            <span class="text-xs bg-surface-container text-on-surface-variant px-2 py-1 rounded-full font-label">RISC/CISC</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════ SOBRE ══════════════════ -->
+<section class="py-20 bg-background" id="sobre">
+  <div class="max-w-7xl mx-auto px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div>
+        <span class="text-tertiary uppercase tracking-widest text-xs font-label font-bold">Sobre o projeto</span>
+        <h2 class="text-4xl font-headline text-primary mt-2 mb-6">Uma plataforma feita por estudantes</h2>
+        <p class="text-on-surface-variant font-body leading-relaxed mb-4">
+          O Hub Acadêmico é um projeto independente desenvolvido por alunos de Ciência da Computação da UFBA. O objetivo é centralizar material de apoio, referências rápidas e ferramentas interativas para as disciplinas do curso.
+        </p>
+        <p class="text-on-surface-variant font-body leading-relaxed mb-8">
+          Cada módulo é desenvolvido colaborativamente e mantido pela turma da respectiva disciplina. A plataforma foi projetada para crescer conforme novas disciplinas e simuladores forem adicionados.
+        </p>
+        <div class="flex flex-wrap gap-6 text-sm font-body text-on-surface-variant">
+          <div class="text-center">
+            <div class="text-3xl font-headline text-primary font-bold">2</div>
+            <div>Disciplinas ativas</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl font-headline text-primary font-bold">1</div>
+            <div>Simulador disponível</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl font-headline text-primary font-bold">7</div>
+            <div>Algoritmos implementados</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA dark -->
+      <div class="rounded-xl p-10 text-on-primary" style="background: linear-gradient(135deg, #00113a 0%, #002366 100%);">
+        <span class="material-symbols-outlined text-4xl mb-4 block" style="color: rgba(179,197,255,.7)">school</span>
+        <h3 class="text-2xl font-headline mb-4">Contribua com o projeto</h3>
+        <p class="text-sm leading-relaxed mb-8" style="color: rgba(255,255,255,.7)">
+          Quer adicionar conteúdo, corrigir algo ou criar um simulador para sua disciplina? O projeto está aberto para contribuições de alunos e professores.
+        </p>
+        <a href="https://github.com/g-barreto00/Site-PSB" target="_blank"
+           class="inline-flex items-center gap-2 border border-white/20 text-on-primary px-6 py-3 rounded-lg font-body font-semibold text-sm hover:bg-white/10 transition-colors">
+          <span class="material-symbols-outlined text-base">open_in_new</span>
+          Ver no GitHub
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer class="w-full py-8 px-6 border-t border-outline-variant/20 bg-surface-container-low">
+  <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-on-surface-variant font-body">
+    <div class="font-headline font-bold text-base text-primary">
+      Hub <span class="text-secondary italic font-normal">Acadêmico</span>
+    </div>
+    <p>© 2026 · Computação UFBA — Projeto acadêmico independente</p>
+  </div>
+</footer>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,1649 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<title>PSB · Prog.Software Básico UFBA</title>
+<link rel="icon" type="image/png" href="img/mainIMG.png">
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "surface-dim": "#dadad5",
+          "on-primary-fixed-variant": "#2a4386",
+          "on-secondary-fixed-variant": "#900723",
+          "secondary-fixed-dim": "#ffb3b3",
+          "on-tertiary-fixed": "#211b00",
+          "on-primary-fixed": "#00174a",
+          "inverse-primary": "#b3c5ff",
+          "outline-variant": "#c5c6d2",
+          "tertiary-fixed": "#f7e382",
+          "inverse-surface": "#2f312e",
+          "on-surface": "#1a1c19",
+          "surface-bright": "#fafaf5",
+          "primary-container": "#002366",
+          "surface-variant": "#e3e3de",
+          "surface-tint": "#435b9f",
+          "surface-container-highest": "#e3e3de",
+          "error": "#ba1a1a",
+          "on-secondary": "#ffffff",
+          "on-primary": "#ffffff",
+          "secondary-container": "#fe5f6b",
+          "primary": "#00113a",
+          "surface-container-lowest": "#ffffff",
+          "surface-container-low": "#f4f4ef",
+          "primary-fixed": "#dbe1ff",
+          "on-tertiary": "#ffffff",
+          "on-error": "#ffffff",
+          "on-background": "#1a1c19",
+          "on-primary-container": "#758dd5",
+          "primary-fixed-dim": "#b3c5ff",
+          "on-secondary-fixed": "#40000a",
+          "inverse-on-surface": "#f1f1ec",
+          "on-tertiary-container": "#493f00",
+          "tertiary-fixed-dim": "#dac769",
+          "surface-container": "#eeeee9",
+          "on-secondary-container": "#640014",
+          "tertiary-container": "#bdab51",
+          "surface-container-high": "#e8e8e3",
+          "secondary-fixed": "#ffdad9",
+          "error-container": "#ffdad6",
+          "on-tertiary-fixed-variant": "#524700",
+          "on-surface-variant": "#444650",
+          "tertiary": "#6c5e06",
+          "surface": "#fafaf5",
+          "secondary": "#b22738",
+          "outline": "#757682",
+          "on-error-container": "#93000a",
+          "background": "#fafaf5"
+        },
+        fontFamily: {
+          "headline": ["Noto Serif", "serif"],
+          "body": ["Work Sans", "sans-serif"],
+          "label": ["Work Sans", "sans-serif"]
+        },
+        borderRadius: {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  }
+  body {
+    background-color: #fafaf5;
+    color: #1a1c19;
+    font-family: 'Work Sans', sans-serif;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Noto Serif', serif;
+  }
+
+  /* Nav glass */
+  nav {
+    background: rgba(250, 250, 245, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  /* Hero image grayscale blend 
+  .hero-img {
+    filter: grayscale(100%);
+    opacity: 0.82;
+    mix-blend-mode: multiply;
+  }
+
+  /* Card hover lift */
+  .module-card {
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+    border: 1px solid rgba(197,198,210,0.35);
+  }
+  .module-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px rgba(26,28,25,0.08);
+  }
+
+  /* Simulide video hover */
+  .video-thumb {
+    transition: transform 0.5s ease;
+  }
+  .video-container:hover .video-thumb {
+    transform: scale(1.04);
+  }
+
+  /* Steps number */
+  .step-num {
+    font-family: 'Noto Serif', serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: rgba(197,198,210,0.25);
+    line-height: 1;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    transition: color 0.2s;
+  }
+  .step-card:hover .step-num {
+    color: rgba(178,39,56,0.18);
+  }
+
+  /* Material section dark CTA */
+  .material-cta {
+    background: linear-gradient(135deg, #00113a 0%, #002366 100%);
+  }
+
+  /* Inline code style */
+  code {
+    font-family: 'Courier New', monospace;
+    background: rgba(0,17,58,0.07);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 0.88em;
+    color: #00113a;
+  }
+
+  /* Content accordion */
+  .acc-body { display: none; }
+  .acc-body.open { display: block; }
+  .acc-arrow { transition: transform 0.2s; display: inline-block; }
+  .acc-arrow.open { transform: rotate(180deg); }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: #f4f4ef; }
+  ::-webkit-scrollbar-thumb { background: #c5c6d2; border-radius: 3px; }
+
+    .step-card {
+    position: relative;
+    padding: 2rem;
+    background: var(--surface-container-lowest);
+    border-radius: 0.75rem;
+    border: 1px solid rgba(var(--outline-variant-rgb), 0.2);
+  }
+ 
+  /* Wrapper que controla a altura colapsada */
+  .step-card-body {
+    max-height: 220px;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  }
+ 
+  .step-card-body.expanded {
+    max-height: none; /* grande o suficiente para qualquer conteúdo */
+  }
+ 
+  /* Gradiente de fade na parte inferior quando colapsado */
+  .step-card-body::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(to bottom, transparent, var(--surface-container-lowest, #fff));
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+ 
+  .step-card-body.expanded::after {
+    opacity: 0;
+  }
+ 
+  /* Botão Ver mais / Ver menos */
+  .expand-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--primary, #6750a4);
+    padding: 0.3rem 0;
+    transition: opacity 0.2s;
+  }
+ 
+  .expand-btn:hover { opacity: 0.75; }
+ 
+  .expand-btn svg {
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+  }
+ 
+  .expand-btn.open svg {
+    transform: rotate(180deg);
+  }
+
+  #mobile-menu {
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+  html {
+  scroll-behavior: smooth;
+}
+</style>
+</head>
+<body class="bg-background text-on-surface">
+
+<!-- ══════════════════
+     NAV 
+══════════════════ -->
+<nav class="fixed top-0 w-full z-50 border-b border-outline-variant/20">
+  <div class="flex justify-between items-center px-6 md:px-8 py-4 max-w-7xl mx-auto">
+    <div class="flex items-center gap-4">
+      <a href="../index.html" class="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors text-sm font-body">
+        <span class="material-symbols-outlined" style="font-size:1rem">arrow_back</span>
+        Hub
+      </a>
+      <span class="text-outline-variant select-none">·</span>
+      <div class="font-headline font-bold text-xl text-primary">
+        PSB <span class="text-secondary italic font-normal">UFBA</span>
+      </div>
+    </div>
+    <div class="hidden md:flex gap-8 items-center">
+      <a class="text-on-surface-variant hover:text-primary transition-colors font-headline text-base tracking-tight" href="#teoria">Teoria</a>
+      <a class="text-on-surface-variant hover:text-primary transition-colors font-headline text-base tracking-tight" href="#simulide">SIMULIDE</a>
+      <a class="text-on-surface-variant hover:text-primary transition-colors font-headline text-base tracking-tight" href="#instrucoes">Instruções</a>
+      <a class="text-on-surface-variant hover:text-primary transition-colors font-headline text-base tracking-tight" href="#material">Material</a>
+    </div>
+    <button class="md:hidden text-primary" onclick="toggleMenu()">
+      <span class="material-symbols-outlined">menu</span>
+    </button>
+    <div id="mobile-menu" class="hidden bg-background border-t border-outline-variant/20 px-6 py-4 flex-col gap-4">
+      <a class="text-on-surface-variant font-headline text-base" href="../index.html">← Hub Acadêmico</a>
+      <a class="text-on-surface-variant font-headline text-base" href="#teoria">Teoria</a>
+      <a class="text-on-surface-variant font-headline text-base" href="#simulide">SIMULIDE</a>
+      <a class="text-on-surface-variant font-headline text-base" href="#instrucoes">Instruções</a>
+      <a class="text-on-surface-variant font-headline text-base" href="#material">Material</a>
+    </div>
+</nav>
+
+<main class="pt-20">
+
+<!-- ══════════════════
+     HERO
+══════════════════ -->
+<section class="relative min-h-[600px] lg:min-h-[750px] flex items-center px-6 md:px-8 max-w-7xl mx-auto overflow-hidden py-16 lg:py-0">
+
+  <!-- Left: texto -->
+  <div class="z-10 w-full lg:max-w-xl">
+    <span class="text-tertiary uppercase tracking-[0.18em] font-label font-medium text-xs mb-5 block">
+      Guia Prático de PSB
+    </span>
+
+    <h1 class="text-[2.4rem] sm:text-[3rem] md:text-[3.6rem] lg:text-[4.2rem] font-headline font-bold text-primary leading-[1.06] mb-6">
+      Programação de<br/>Software Básico<br/>
+      <span class="text-secondary italic">UFBA</span>
+    </h1>
+
+    <p class="text-base text-on-surface-variant font-body leading-relaxed mb-10 max-w-lg">
+      Este site foi desenvolvido para facilitar o estudo de Programação de Software Básico, reunindo conteúdos sobre arquitetura de computadores, linguagem Assembly e execução de programas em baixo nível.
+    </p>
+
+    <div class="flex flex-wrap gap-4">
+      <a href="#teoria" class="bg-primary text-on-primary px-7 py-3.5 rounded-lg font-body font-semibold flex items-center gap-2 hover:scale-[1.02] transition-transform text-sm">
+        Principais Tópicos
+        <span class="material-symbols-outlined text-base">arrow_downward</span>
+      </a>
+      <a href="#material" class="border border-outline-variant/40 text-primary px-7 py-3.5 rounded-lg font-body font-semibold flex items-center gap-2 hover:bg-surface-container-low transition-colors text-sm">
+        Material Didático
+        <span class="material-symbols-outlined text-base">menu_book</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Right: imagem — só aparece em lg+ -->
+  <div class="absolute right-0 top-1/2 -translate-y-1/2 w-[46%] h-[78%] hidden lg:block overflow-hidden rounded-xl">
+    <div class="w-full h-full bg-surface-container-high flex items-center justify-center relative">
+      <img src="img/mainIMG.png" alt="Imagem" class="w-full h-auto rounded-lg object-cover">
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ══════════════════
+     TEORIA 
+══════════════════ -->
+<section class="py-24 bg-surface-container-low" id="teoria">
+  <div class="max-w-7xl mx-auto px-8">
+
+    <div class="mb-14">
+      <span class="text-tertiary uppercase tracking-widest text-xs font-label font-bold"></span>
+      <h2 class="text-4xl font-headline text-primary mt-2">Tópicos de Estudo</h2>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+
+      <!-- Card 1: Teoria e Conceitos -->
+      <a href="#teoria-conteudo" class="module-card group block bg-surface-container-lowest p-8 rounded-xl">
+        <span class="material-symbols-outlined text-4xl text-secondary mb-6 block">menu_book</span>
+        <h3 class="text-xl font-headline text-primary mb-4">Teoria e Conceitos</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-6">
+          Estudo dos fundamentos de como o software é executado pelo hardware, incluindo memória, registradores, linguagem de baixo nível e tradução de instruções.
+        </p>
+        <div class="flex items-center text-primary text-xs font-label font-bold uppercase tracking-wider gap-1">
+          Explorar módulo
+          <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+        </div>
+      </a>
+
+      <!-- Card 2: Laboratório SimulIDE -->
+      <a href="#simulide" class="module-card group block bg-surface-container-lowest p-8 rounded-xl">
+        <span class="material-symbols-outlined text-4xl text-secondary mb-6 block">memory</span>
+        <h3 class="text-xl font-headline text-primary mb-4">SimulIDE</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-6">
+          Guia prático para compilar, carregar e executar códigos Assembly no SimulIDE, com suporte de uma playlist explicativa para acompanhar cada etapa.
+        </p>
+        <div class="flex items-center text-primary text-xs font-label font-bold uppercase tracking-wider gap-1">
+          Explorar módulo
+          <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+        </div>
+      </a>
+
+      <!-- Card 3: Instruções de Base -->
+      <a href="#instrucoes" class="module-card group block bg-surface-container-lowest p-8 rounded-xl">
+        <span class="material-symbols-outlined text-4xl text-secondary mb-6 block">settings_suggest</span>
+        <h3 class="text-xl font-headline text-primary mb-4">Instruções de Base</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-6">
+          Códigos fundamentais em Assembly acompanhados de explicações para entender a lógica de funcionamento do sistema.
+        </p>
+        <div class="flex items-center text-primary text-xs font-label font-bold uppercase tracking-wider gap-1">
+          Explorar módulo
+          <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+        </div>
+      </a>
+
+      <!-- Card 4: Material de Apoio -->
+      <a href="#material" class="module-card group block bg-surface-container-lowest p-8 rounded-xl">
+        <span class="material-symbols-outlined text-4xl text-secondary mb-6 block">library_books</span>
+        <h3 class="text-xl font-headline text-primary mb-4">Material de Apoio</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-6">
+          Acesso a repositórios do GitHub, videoaulas complementares e materiais extras.
+        </p>
+        <div class="flex items-center text-primary text-xs font-label font-bold uppercase tracking-wider gap-1">
+          Explorar módulo
+          <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════
+     TEORIA EXPANDIDA — conteúdo real de estudo
+══════════════════ -->
+<section class="py-24 bg-background" id="teoria-conteudo">
+  <div class="max-w-7xl mx-auto px-8">
+
+    <div class="mb-14">
+      <span class="text-tertiary uppercase tracking-widest text-xs font-label font-bold">Módulo 01</span>
+      <h2 class="text-4xl font-headline text-primary mt-2">Teoria e Conceitos</h2>
+      <p class="text-on-surface-variant mt-3 max-w-2xl font-body leading-relaxed">
+        Os conceitos abaixo formam a base para toda a disciplina. Clique em cada tópico para expandir o conteúdo.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+      <!-- Coluna conteúdo accordion -->
+      <div class="lg:col-span-2 space-y-3">
+
+        <!-- Item 1 -->
+        <div class="bg-surface-container-lowest border border-outline-variant/25 rounded-xl overflow-hidden">
+          <button onclick="toggleAcc(this)" class="w-full flex items-center justify-between p-6 text-left group">
+            <div class="flex items-center gap-4">
+              <span class="w-8 h-8 bg-primary/8 rounded-lg flex items-center justify-center flex-shrink-0">
+                <span class="text-secondary font-headline font-bold text-sm">01</span>
+              </span>
+              <span class="font-headline text-primary text-lg">Introdução</span>
+            </div>
+            <span class="material-symbols-outlined acc-arrow text-on-surface-variant text-xl">expand_more</span>
+          </button>
+          <div class="acc-body px-6 pb-6">
+            <div class="pl-12 space-y-4 text-on-surface-variant font-body text-sm leading-relaxed">
+              <p>O <strong class="text-primary">ATMEGA328P</strong> é um microcontrolador (µC) RISC de 8 bits baseado na arquitetura AVR RISC, que por sua vez é uma implementação da arquitetura de Harvard, que separa a memória de Programa da memória de Dados. Por se tratar de um µC de arquitetura RISC, uma de suas principais caracteristicas é que apenas as instruções LOAD e STORE tem a capacidade de acessar registradores da Memória de dados. </p>
+              <div class="bg-surface-container-low rounded-lg p-4 mt-4">
+                  <img src="img/atmega.png" alt="Imagem" class="w-full h-auto rounded-lg object-cover">
+              </div>
+              
+
+                    <div>
+                      <h3 class="text-primary font-bold mb-2">Especificações Principais</h3>
+                      <ul class="text-on-surface-variant text-sm space-y-1">
+                        <li><strong>Arquitetura:</strong> AVR RISC de 8 bits</li>
+                        <li><strong>Instruções:</strong> 131</li>
+                        <li><strong>Memória de Programa:</strong> 32 KB</li>
+                        <li><strong>Memória de Dados:</strong> 2304 B</li>
+                        <li><strong>SRAM (RAM):</strong> 2 KB</li>
+                        <li><strong>I/O Externo:</strong> 160 B</li>
+                        <li><strong>I/O Interno:</strong> 64 B</li>
+                        <li><strong>Registradores de propósito geral:</strong> 32</li>
+                        <li><strong>EEPROM (ROM):</strong> 1 KB</li>
+                        <li><strong>Pinos de I/O:</strong> 23</li>
+                      </ul>
+                    </div>
+            </div>
+          </div>
+        </div>
+
+          <!-- Item 2 -->
+          <div class="bg-surface-container-lowest border border-outline-variant/25 rounded-xl overflow-hidden">
+            
+            <!-- Header -->
+            <button onclick="toggleAcc(this)" class="w-full flex items-center justify-between p-6 text-left group">
+              <div class="flex items-center gap-4">
+                <span class="w-8 h-8 bg-primary/8 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <span class="text-secondary font-headline font-bold text-sm">02</span>
+                </span>
+                <span class="font-headline text-primary text-lg">Registradores</span>
+              </div>
+              <span class="material-symbols-outlined acc-arrow text-on-surface-variant text-xl">expand_more</span>
+            </button>
+
+            <!-- Body -->
+            <div class="acc-body px-6 pb-6">
+              <div class="pl-12 space-y-6 text-on-surface-variant font-body text-sm leading-relaxed">
+
+                <!-- Texto inicial -->
+                <p>
+                  Os registradores de propósito geral são nomeados de R0 à R31. Os seis últimos podem ser combinados para formar registradores de 16 bits:
+                  <strong>X</strong> [R27:R26], <strong>Y</strong> [R29:R28] e <strong>Z</strong> [R31:R30].
+                  O registrador par armazena os 8 bits menos significativos (LSB) e o ímpar os 8 bits mais significativos (MSB).
+                </p>
+
+                <!-- Registradores (corrigido: isso era x86, mas mantive só visual) -->
+                <div class="bg-surface-container-low rounded-xl p-5">
+                  <div class="text-primary font-headline font-bold text-sm mb-4">
+                    Registradores (Exemplo Genérico)
+                  </div>
+
+                  <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-body">
+                    <div class="bg-surface-container rounded-lg p-2.5 text-center">
+                      <div class="font-bold text-primary font-mono">RAX</div>
+                      <div class="text-on-surface-variant mt-0.5">Acumulador</div>
+                    </div>
+                    <div class="bg-surface-container rounded-lg p-2.5 text-center">
+                      <div class="font-bold text-primary font-mono">RBX</div>
+                      <div class="text-on-surface-variant mt-0.5">Base</div>
+                    </div>
+                    <div class="bg-surface-container rounded-lg p-2.5 text-center">
+                      <div class="font-bold text-primary font-mono">RCX</div>
+                      <div class="text-on-surface-variant mt-0.5">Contador</div>
+                    </div>
+                    <div class="bg-surface-container rounded-lg p-2.5 text-center">
+                      <div class="font-bold text-primary font-mono">RDX</div>
+                      <div class="text-on-surface-variant mt-0.5">Dados</div>
+                    </div>
+                  </div>
+
+                  <p class="text-on-surface-variant text-xs mt-3">
+                    Obs: Este exemplo é baseado em arquitetura 16 bits (x86), apenas para referência visual.
+                  </p>
+                </div>
+
+                <!-- I/O -->
+                <h2 class="text-primary font-headline text-lg">
+                  Registradores mais importantes do I/O interno
+                </h2>
+
+                <!-- SREG -->
+                <h3 class="font-headline text-primary">SREG (Status Register)</h3>
+
+                <div class="bg-surface-container-low rounded-lg p-4">
+                  <img src="img/SREG.png" alt="SREG" class="w-full h-auto rounded-lg object-cover">
+                </div>
+
+                <p>
+                  O SREG reporta, em cada um de seus bits, como foi a conclusão da última instrução executada:
+                </p>
+
+                <ul class="space-y-1">
+                  <li><strong>C:</strong> ocorrência de overflow em operações sem sinal (unsigned).</li>
+                  <li><strong>Z:</strong> resultado da operação é zero.</li>
+                  <li><strong>N:</strong> resultado negativo.</li>
+                  <li><strong>V:</strong> overflow em operações com sinal (signed).</li>
+                  <li><strong>S:</strong> sinal lógico do resultado (0 = positivo, 1 = negativo).</li>
+                  <li><strong>H:</strong> overflow do primeiro para o segundo nibble.</li>
+                  <li><strong>T:</strong> bit temporário para cópia.</li>
+                  <li><strong>I:</strong> controle global de interrupções.</li>
+                </ul>
+
+                <!-- SP -->
+                <h3 class="font-headline text-primary">SP (Stack Pointer)</h3>
+
+                <div class="bg-surface-container-low rounded-lg p-4">
+                  <img src="img/stackpointer.png" alt="SP" class="w-full h-auto rounded-lg object-cover">
+                </div>
+
+                <p>
+                  O SP armazena o endereço da SRAM correspondente ao topo da pilha.
+                  No AVR, utiliza o modelo <strong>Full Descending Stack</strong>, onde o SP aponta para o último endereço ocupado.
+                </p>
+
+                <ul class="space-y-1">
+                  <li><strong>PUSH:</strong> pré-decrementa o SP e armazena o dado.</li>
+                  <li><strong>POP:</strong> carrega o dado e pós-incrementa o SP.</li>
+                </ul>
+
+                <p>
+                  O SP é implementado como dois registradores de I/O:
+                  <strong>SPH</strong> e <strong>SPL</strong>, totalizando 12 bits de endereçamento.
+                </p>
+
+              </div>
+            </div>
+          </div>
+
+        <!-- Item 3 -->
+          <div class="bg-surface-container-lowest border border-outline-variant/25 rounded-xl overflow-hidden">
+            <button onclick="toggleAcc(this)" class="w-full flex items-center justify-between p-6 text-left group">
+              <div class="flex items-center gap-4">
+                <span class="w-8 h-8 bg-primary/8 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <span class="text-secondary font-headline font-bold text-sm">03</span>
+                </span>
+                <span class="font-headline text-primary text-lg">Pinagem Essencial (PDIP-28)</span>
+              </div>
+              <span class="material-symbols-outlined acc-arrow text-on-surface-variant text-xl">expand_more</span>
+            </button>
+
+            <div class="acc-body px-6 pb-6">
+              <div class="pl-12 space-y-4 text-on-surface-variant font-body text-sm leading-relaxed">
+                <p>
+                  A tabela abaixo mostra alguns pinos essenciais de alimentação e referência do encapsulamento PDIP-28.
+                </p>
+
+                <div class="overflow-x-auto">
+                  <table class="w-full border border-outline-variant/25 rounded-lg overflow-hidden text-sm">
+                    <thead class="bg-surface-container-low text-primary">
+                      <tr>
+                        <th class="text-left px-4 py-3 font-semibold">Pino</th>
+                        <th class="text-left px-4 py-3 font-semibold">Símbolo</th>
+                        <th class="text-left px-4 py-3 font-semibold">Função Principal</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="border-t border-outline-variant/20">
+                        <td class="px-4 py-3">7</td>
+                        <td class="px-4 py-3 font-semibold text-primary">Vcc</td>
+                        <td class="px-4 py-3">Alimentação (+5V) para circuitos digitais</td>
+                      </tr>
+                      <tr class="border-t border-outline-variant/20">
+                        <td class="px-4 py-3">20</td>
+                        <td class="px-4 py-3 font-semibold text-primary">AVcc</td>
+                        <td class="px-4 py-3">Alimentação (+5V) para circuitos analógicos</td>
+                      </tr>
+                      <tr class="border-t border-outline-variant/20">
+                        <td class="px-4 py-3">21</td>
+                        <td class="px-4 py-3 font-semibold text-primary">AREF</td>
+                        <td class="px-4 py-3">Tensão de referência para o ADC</td>
+                      </tr>
+                      <tr class="border-t border-outline-variant/20">
+                        <td class="px-4 py-3">8, 22</td>
+                        <td class="px-4 py-3 font-semibold text-primary">GND</td>
+                        <td class="px-4 py-3">Aterramento</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                  <div class="bg-surface-container-low rounded-lg p-4">
+                    <img src="img/pinosATMEGA.png" alt="SP" class="w-full h-auto rounded-lg object-cover">
+                  </div>
+              </div>
+            </div>
+          </div>
+
+        <!-- Item 4 -->
+        <div class="bg-surface-container-lowest border border-outline-variant/25 rounded-xl overflow-hidden">
+          <button onclick="toggleAcc(this)" class="w-full flex items-center justify-between p-6 text-left group">
+            <div class="flex items-center gap-4">
+              <span class="w-8 h-8 bg-primary/8 rounded-lg flex items-center justify-center flex-shrink-0">
+                <span class="text-secondary font-headline font-bold text-sm">04</span>
+              </span>
+              <span class="font-headline text-primary text-lg">Instruções de Controle de Fluxo</span>
+            </div>
+            <span class="material-symbols-outlined acc-arrow text-on-surface-variant text-xl">expand_more</span>
+          </button>
+            <div class="acc-body px-6 pb-6">
+              <div class="pl-12 space-y-4 text-on-surface-variant font-body text-sm leading-relaxed">
+
+                <p>
+                  Assim como na arquitetura x86, as instruções de controle de fluxo podem ser divididas em
+                  <strong>desvios incondicionais</strong> e <strong>condicionais</strong>.
+                </p>
+
+                <!-- ================= INCONDICIONAL ================= -->
+                <h3 class="text-primary font-headline font-semibold mt-4">Desvio Incondicional</h3>
+                <p>Executam o salto independentemente do estado do processador.</p>
+
+                <div class="space-y-2">
+
+                  <div class="bg-surface-container-low rounded-lg p-3">
+                    <strong class="text-primary">JMP (Jump)</strong> — salto para endereço absoluto
+                    <ul class="mt-2 list-disc pl-5">
+                      <li><strong>Tamanho:</strong> 2 palavras (4 bytes)</li>
+                      <li><strong>Clock:</strong> 3 ciclos</li>
+                      <li><strong>Uso:</strong> endereça toda memória de programa</li>
+                    </ul>
+                  </div>
+
+                  <div class="bg-surface-container-low rounded-lg p-3">
+                    <strong class="text-primary">RJMP (Relative Jump)</strong> — salto relativo (PC ← PC + k + 1)
+                    <ul class="mt-2 list-disc pl-5">
+                      <li><strong>Tamanho:</strong> 1 palavra (2 bytes)</li>
+                      <li><strong>Clock:</strong> 2 ciclos</li>
+                      <li><strong>Uso:</strong> loops curtos e desvios locais</li>
+                    </ul>
+                  </div>
+
+                  <div class="bg-surface-container-low rounded-lg p-3">
+                    <strong class="text-primary">IJMP (Indirect Jump)</strong> — salto via registrador Z
+                    <ul class="mt-2 list-disc pl-5">
+                      <li><strong>Tamanho:</strong> 1 palavra (2 bytes)</li>
+                      <li><strong>Clock:</strong> 2 ciclos</li>
+                      <li><strong>Uso:</strong> jump tables e ponteiros de função</li>
+                    </ul>
+                  </div>
+
+                </div>
+
+                <!-- ================= CONDICIONAL ================= -->
+                <h3 class="text-primary font-headline font-semibold mt-6">Desvio Condicional</h3>
+                <p>O salto depende de uma comparação prévia e das flags do SREG.</p>
+
+                <!-- Comparação -->
+                <h4 class="text-primary font-semibold mt-3">1. Instruções de Comparação</h4>
+
+                <div class="space-y-2">
+
+                  <div class="bg-surface-container-low rounded-lg p-3">
+                    <strong class="text-primary">CPI</strong> — compara registrador com constante (Rd − K)
+                  </div>
+
+                  <div class="bg-surface-container-low rounded-lg p-3">
+                    <strong class="text-primary">CPC</strong> — compara registradores com carry (Rd − Rr − C)
+                  </div>
+
+                  <div class="bg-surface-container-low rounded-lg p-3">
+                    <strong class="text-primary">CPSE</strong> — pula próxima instrução se iguais
+                  </div>
+
+                </div>
+
+                <!-- Branch -->
+                <h4 class="text-primary font-semibold mt-3">2. Instruções de Branch (BRxx)</h4>
+
+                <div class="bg-surface-container-low rounded-lg p-3">
+                  <strong class="text-primary">BRxx</strong> — salto relativo baseado no SREG
+                  <ul class="mt-2 list-disc pl-5">
+                    <li><strong>Tamanho:</strong> 1 palavra</li>
+                    <li><strong>Clock:</strong> 1 ciclo (falso) / 2 ciclos (verdadeiro)</li>
+                    <li><strong>Uso:</strong> estruturas como if, while, for</li>
+                  </ul>
+                </div>
+
+                <!-- Tipos de Branch -->
+                <div class="space-y-3">
+
+                  <div class="bg-surface-container-low rounded-lg p-3">
+                    <strong class="text-primary">Igualdade</strong><br>
+                    BREQ (igual) | BRNE (diferente)
+                  </div>
+
+                  <div class="bg-surface-container-low rounded-lg p-3">
+                    <strong class="text-primary">Sem sinal</strong><br>
+                    BRLO (menor) | BRSH (maior ou igual)
+                  </div>
+
+                  <div class="bg-surface-container-low rounded-lg p-3">
+                    <strong class="text-primary">Com sinal</strong><br>
+                    BRLT (menor) | BRGE (maior ou igual)
+                  </div>
+
+                  <div class="bg-surface-container-low rounded-lg p-3">
+                    <strong class="text-primary">Overflow</strong><br>
+                    BRVS (com overflow) | BRVC (sem overflow)
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+        </div>
+
+      </div>
+
+<!-- Sidebar com referência rápida -->
+<div class="space-y-5">
+  <div class="bg-surface-container-low rounded-xl p-6 border border-outline-variant/20">
+    <div class="text-tertiary font-label text-xs uppercase tracking-wider mb-4">Referência Rápida: X86 -> AVR</div>
+    <div class="space-y-2">
+
+      <!-- MOV -->
+      <div class="border-b border-outline-variant/15">
+        <button onclick="toggleAcc(this)" class="w-full flex justify-between items-center py-2 text-left bg-transparent border-none cursor-pointer">
+          <code class="text-secondary font-body">MOV end1, end2</code>
+          <div class="flex items-center gap-2">
+            <span class="text-on-surface-variant text-xs font-body">Mover dados</span>
+            <span class="acc-arrow text-on-surface-variant text-xs">▾</span>
+          </div>
+        </button>
+        <div class="acc-content" style="display:none; padding-bottom: 10px;">
+          <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5">
+            <div class="text-on-surface/50 mb-1"># equivalente em AVR</div>
+            <div>LDI R16, end1</div>
+            <div>STS end2, R16</div>
+            
+            
+            
+          </div>
+        </div>
+      </div>
+
+      <!-- ADD -->
+      <div class="border-b border-outline-variant/15">
+        <button onclick="toggleAcc(this)" class="w-full flex justify-between items-center py-2 text-left bg-transparent border-none cursor-pointer">
+          <code class="text-secondary font-body">ADD end1, end2</code>
+          <div class="flex items-center gap-2">
+            <span class="text-on-surface-variant text-xs font-body">Adição</span>
+            <span class="acc-arrow text-on-surface-variant text-xs">▾</span>
+          </div>
+        </button>
+        <div class="acc-content" style="display:none; padding-bottom: 10px;">
+          <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5">
+            <div class="text-on-surface/50 mb-1"># equivalente em AVR</div>
+            <div>LDS R16, end1</div>
+            <div>LDS R17, end2</div>
+            <div>ADD R16, R17</div>
+            <div>STS end1, R16</div>
+            
+            
+           
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB -->
+      <div class="border-b border-outline-variant/15">
+        <button onclick="toggleAcc(this)" class="w-full flex justify-between items-center py-2 text-left bg-transparent border-none cursor-pointer">
+          <code class="text-secondary font-body">SUB dst, src</code>
+          <div class="flex items-center gap-2">
+            <span class="text-on-surface-variant text-xs font-body">Subtração</span>
+            <span class="acc-arrow text-on-surface-variant text-xs">▾</span>
+          </div>
+        </button>
+        <div class="acc-content" style="display:none; padding-bottom: 10px;">
+          <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5">
+            <div class="text-on-surface/50 mb-1"># equivalente em AVR</div>
+            <div>LDS R16, end1</div>
+            <div>LDS R17, end2</div>
+            <div>SUB R16, R17</div>
+            <div>STS end1, R16</div>
+           
+          </div>
+        </div>
+      </div>
+
+      <!-- INC -->
+      <div class="border-b border-outline-variant/15">
+        <button onclick="toggleAcc(this)" class="w-full flex justify-between items-center py-2 text-left bg-transparent border-none cursor-pointer">
+          <code class="text-secondary font-body">INC end1</code>
+          <div class="flex items-center gap-2">
+            <span class="text-on-surface-variant text-xs font-body">Incrementar</span>
+            <span class="acc-arrow text-on-surface-variant text-xs">▾</span>
+          </div>
+        </button>
+        <div class="acc-content" style="display:none; padding-bottom: 10px;">
+          <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5">
+            <div class="text-on-surface/50 mb-1"># equivalente em AVR</div>
+            <div>LDS R16, end1</div>
+            <div>INC R16</div>
+            <div>STS end1, R16</div>
+            
+            
+            
+          </div>
+        </div>
+      </div>
+
+      <!-- DEC -->
+      <div class="border-b border-outline-variant/15">
+        <button onclick="toggleAcc(this)" class="w-full flex justify-between items-center py-2 text-left bg-transparent border-none cursor-pointer">
+          <code class="text-secondary font-body">DEC end1</code>
+          <div class="flex items-center gap-2">
+            <span class="text-on-surface-variant text-xs font-body">Decrementar</span>
+            <span class="acc-arrow text-on-surface-variant text-xs">▾</span>
+          </div>
+        </button>
+        <div class="acc-content" style="display:none; padding-bottom: 10px;">
+          <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5">
+            <div class="text-on-surface/50 mb-1"># equivalente em AVR</div>
+            <div>LDS R16, end1</div>
+            <div>DEC R16</div>
+            <div>STS end1, R16</div>
+            
+          </div>
+        </div>
+      </div>
+
+      <!-- PUSH -->
+      <div class="border-b border-outline-variant/15">
+        <button onclick="toggleAcc(this)" class="w-full flex justify-between items-center py-2 text-left bg-transparent border-none cursor-pointer">
+          <code class="text-secondary font-body">PUSH end1</code>
+          <div class="flex items-center gap-2">
+            <span class="text-on-surface-variant text-xs font-body">Empilhar</span>
+            <span class="acc-arrow text-on-surface-variant text-xs">▾</span>
+          </div>
+        </button>
+        <div class="acc-content" style="display:none; padding-bottom: 10px;">
+          <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5">
+            <div class="text-on-surface/50 mb-1"># equivalente em AVR</div>
+            <div>LDS R16, end1</div>
+            <div>PUSH R16</div>
+            
+            
+          </div>
+        </div>
+      </div>
+
+      <!-- POP -->
+      <div>
+        <button onclick="toggleAcc(this)" class="w-full flex justify-between items-center py-2 text-left bg-transparent border-none cursor-pointer">
+          <code class="text-secondary font-body">POP end1</code>
+          <div class="flex items-center gap-2">
+            <span class="text-on-surface-variant text-xs font-body">Desempilhar</span>
+            <span class="acc-arrow text-on-surface-variant text-xs">▾</span>
+          </div>
+        </button>
+        <div class="acc-content" style="display:none; padding-bottom: 10px;">
+          <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5">
+            <div class="text-on-surface/50 mb-1"># equivalente em AVR</div>
+            <div>POP R16</div>
+            <div>STS end1, R16</div>
+            
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+</section>
+
+
+<!-- ══════════════════
+     SIMULIDE — layout 2 colunas, adaptado
+══════════════════ -->
+<section class="py-24 bg-surface-container-low" id="simulide">
+  <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch">
+
+    <!-- Coluna esquerda -->
+    <div class="flex flex-col">
+      <span class="text-tertiary uppercase tracking-widest text-xs font-label font-bold">Laboratório Virtual</span>
+      <h2 class="text-5xl font-headline text-primary mt-4 mb-8 leading-tight">SimulIDE:<br/>Prática e Validação</h2>
+
+      <p class="text-on-surface-variant text-lg leading-relaxed mb-8 font-body">
+        O SimulIDE é um simulador de circuitos eletrônicos em tempo real que permite testar circuitos com o
+        <strong class="text-primary">ATmega328P</strong> e executar programas em <strong class="text-primary">Assembly AVR</strong>
+        por meio do carregamento de arquivos <code>.hex</code>. Ele é uma ferramenta essencial para validar o funcionamento
+        do código antes da execução em hardware real.
+      </p>
+
+      <!-- Fluxo geral -->
+      <div class="space-y-3 mb-10 flex-1">
+        <div class="text-primary font-label font-bold text-xs uppercase tracking-wider mb-3">Fluxo de utilização</div>
+
+        <div class="flex gap-3 bg-surface-container-lowest rounded-lg p-4 items-start">
+          <span class="w-6 h-6 bg-secondary text-on-secondary rounded-full flex items-center justify-center text-xs font-label font-bold flex-shrink-0">1</span>
+          <span class="text-on-surface-variant text-sm font-body">
+            Escreva o código em <strong class="text-primary">Assembly AVR</strong> para o <code>ATmega328P</code>.
+          </span>
+        </div>
+
+        <div class="flex gap-3 bg-surface-container-lowest rounded-lg p-4 items-start">
+          <span class="w-6 h-6 bg-secondary text-on-secondary rounded-full flex items-center justify-center text-xs font-label font-bold flex-shrink-0">2</span>
+          <span class="text-on-surface-variant text-sm font-body">
+            Compile o arquivo no <strong class="text-primary">AVRA</strong> (Linux) ou no <strong class="text-primary">Microchip Studio</strong> (Windows).
+          </span>
+        </div>
+
+        <div class="flex gap-3 bg-surface-container-lowest rounded-lg p-4 items-start">
+          <span class="w-6 h-6 bg-secondary text-on-secondary rounded-full flex items-center justify-center text-xs font-label font-bold flex-shrink-0">3</span>
+          <span class="text-on-surface-variant text-sm font-body">
+            Localize o arquivo <code>.hex</code> gerado após a compilação.
+          </span>
+        </div>
+
+        <div class="flex gap-3 bg-surface-container-lowest rounded-lg p-4 items-start">
+          <span class="w-6 h-6 bg-secondary text-on-secondary rounded-full flex items-center justify-center text-xs font-label font-bold flex-shrink-0">4</span>
+          <span class="text-on-surface-variant text-sm font-body">
+            No SimulIDE, monte o circuito, clique com o botão direito no <code>ATmega328P</code>,
+            selecione <strong class="text-primary">Load Firmware</strong> e carregue o <code>.hex</code>.
+          </span>
+        </div>
+
+        <div class="flex gap-3 bg-surface-container-lowest rounded-lg p-4 items-start">
+          <span class="w-6 h-6 bg-secondary text-on-secondary rounded-full flex items-center justify-center text-xs font-label font-bold flex-shrink-0">5</span>
+          <span class="text-on-surface-variant text-sm font-body">
+            Clique em <strong class="text-primary">Run</strong> para iniciar a simulação e observar o comportamento do circuito.
+          </span>
+        </div>
+      </div>
+
+      <a href="https://simulide.com/p/" class="inline-flex items-center gap-3 bg-secondary text-on-secondary px-8 py-4 rounded-lg font-body font-bold hover:opacity-90 transition-opacity text-sm self-start">
+        <span class="material-symbols-outlined">open_in_new</span>
+         Site SimulIDE
+      </a>
+    </div>
+
+    <!-- Video -->
+   <div class="relative bg-surface-container-high rounded-xl overflow-hidden flex items-center justify-center video-container cursor-pointer group w-full" style="height: 300px;">
+      <div class="absolute inset-0">
+  <img 
+    src="https://img.youtube.com/vi/G6xD6nZowBw/maxresdefault.jpg" 
+    alt="Playlist SimulIDE" 
+    class="w-full h-full object-cover"
+  >
+  <!-- escurecimento leve para o botão contrastar -->
+  <div class="absolute inset-0 bg-primary/50"></div>
+</div>
+      <a href="https://www.youtube.com/watch?v=G6xD6nZowBw&list=PLgQWT5lbdeggN-FQgRenW1UhV0NcMxYPm" target="_blank" class="relative z-10">
+        <div class="text-center hover:scale-105 transition-transform cursor-pointer">
+          <div class="w-20 h-20 bg-on-primary/90 text-primary rounded-full flex items-center justify-center mb-4 mx-auto shadow-2xl">
+            <span class="material-symbols-outlined text-4xl">play_arrow</span>
+          </div>
+          <p class="font-headline text-on-primary font-bold text-xl">Playlist SimulIDE</p>
+          <p class="text-sm text-on-primary/60 font-body">Assistir no YouTube</p>
+        </div>
+      </a>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════
+     INSTRUÇÕES 
+══════════════════ -->
+<section class="py-24 bg-background" id="instrucoes">
+  <div class="max-w-7xl mx-auto px-8">
+
+    <div class="text-center mb-20">
+      <span class="text-tertiary uppercase tracking-widest text-xs font-label font-bold"></span>
+      <h2 class="text-4xl font-headline text-primary mt-2">Instruções de Base</h2>
+      <p class="text-on-surface-variant mt-4 font-body">Passo a passo essencial</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+       
+    
+       <!-----------------------------------------------------Step 1 --------------------------------------------------------->
+
+
+
+        <div class="relative p-8 bg-surface-container-lowest step-card rounded-xl border border-outline-variant/20 group" style="margin-top:1rem">
+          <div class="step-num">01</div>
+          <h4 class="text-xl font-headline text-primary mb-4">LED-Vcc</h4>
+        
+          <div class="step-card-body" id="body-1">
+            <p class="text-on-surface-variant text-sm font-body leading-relaxed">
+              Primeiramente, há de ser criado um snippet de inicialização do µC, responsável por configurá-lo 
+              para que ele possa realizar o objetivo desejado. Para isso, iremos definir o DDRD 
+              (Data Direction Register D) para 0b11111111, para que todos os pinos de PORTD estejam 
+              na direção de output.
+            </p>
+            <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5 my-3">
+              <div class="text-on-surface/50 mb-1">INICIO:</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;LDI R16, 0b11111111</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;OUT DDRD, R16</div>
+            </div>
+            <p class="text-on-surface-variant text-sm font-body leading-relaxed">
+              Por fim, basta passar o valor de 0b00000001 para PORTD, definindo que o pino D0 será o único 
+              a receber a corrente de 5Vcc, enquanto os outros permanecerão desligados.
+            </p>
+            <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5 my-3">
+              <div>LDI R16, 0b00000001</div>
+              <div>OUT PORTD, R16</div>
+            </div>
+
+            <div class="bg-surface-container-low rounded-lg p-3 mt-3">
+              <img src="img/ledvcc.png" alt="Circuito LED-GND" class="w-full h-auto rounded-lg object-cover">
+            </div>
+
+          </div>
+        
+          <button class="expand-btn" id="btn-1" onclick="toggleCard('1')">
+            Ver mais
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+        </div>
+    
+        
+       
+       
+         <!-----------------------------------------------------Step 2 --------------------------------------------------------->
+
+
+        <div class="relative p-8 bg-surface-container-lowest step-card rounded-xl border border-outline-variant/20 group" style="margin-top:1rem">
+          <div class="step-num">02</div>
+          <h4 class="text-xl font-headline text-primary mb-4">LED-GND</h4>
+        
+          <div class="step-card-body" id="body-2">
+            <p class="text-on-surface-variant text-sm font-body leading-relaxed">
+              Primeiramente, há de ser criado um snippet de inicialização do µC, responsável por configurá-lo 
+              para que ele possa realizar o objetivo desejado. Para isso, iremos definir o DDRD 
+              (Data Direction Register D) para 0b11111111, para que todos os pinos de PORTD estejam 
+              na direção de output.
+            </p>
+            <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5 my-3">
+              <div class="text-on-surface/50 mb-1">INICIO:</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;LDI R16, 0b11111111</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;OUT DDRD, R16</div>
+            </div>
+            <p class="text-on-surface-variant text-sm font-body leading-relaxed">
+              Por fim, basta passar o valor de 0b11111110 para PORTD, definindo que o pino D0 será o único 
+              a não receber corrente, atuando como GND, enquanto os outros permanecerão ligados.
+            </p>
+            <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5 my-3">
+              <div>LDI R16, 0b11111110</div>
+              <div>OUT PORTD, R16</div>
+            </div>
+
+             <div class="bg-surface-container-low rounded-lg p-3 mt-3">
+              <img src="img/ledgnd.png" alt="Circuito LED-GND" class="w-full h-auto rounded-lg object-cover">
+            </div>
+           
+          </div>
+        
+          <button class="expand-btn" id="btn-2" onclick="toggleCard('2')">
+            Ver mais
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+        </div>
+        
+    
+     
+         <!-----------------------------------------------------Step 3 --------------------------------------------------------->
+
+
+
+        <div class="relative p-8 bg-surface-container-lowest step-card rounded-xl border border-outline-variant/20 group" style="margin-top:1rem">
+          <div class="step-num">03</div>
+          <h4 class="text-xl font-headline text-primary mb-4">Blink</h4>
+        
+          <div class="step-card-body" id="body-3">
+            <p class="text-on-surface-variant text-sm font-body leading-relaxed">
+              Primeiramente, iremos definir o DDRD para 0b11111111, para que todos os pinos de PORTD estejam 
+              na direção de output e também definir PORTD para 0b00000000, para garantir que todos os pinos 
+              comecem desligados.
+            </p>
+            <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5 my-3">
+              <div class="text-on-surface/50 mb-1">INICIO:</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;LDI R16, 0b11111111</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;OUT DDRD, R16</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;LDI R16, 0b00000000</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;OUT PORTD, R16</div>
+            </div>
+            <p class="text-on-surface-variant text-sm font-body leading-relaxed">
+              Para a nossa rotina principal, iremos primeiramente utilizar a instrução SBI (Set Bit I/O) em 
+              (PORTD, PD0) para mudar o valor de PORTD de 0b00000000 para 0b00000001, ligando o LED ligado 
+              ao pino D0. Após isso, chamaremos uma rotina de atraso e depois utilizaremos a instrução 
+              CBI (Clear Bit I/O) em (PORTD, PD0) para mudar o valor de PORTD de 0b00000001 para 0b00000000 
+              novamente. Por fim, utilizaremos a instrução RJMP na label PRINCIPAL para voltarmos ao início 
+              da rotina.
+            </p>
+            <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5 my-3">
+              <div class="text-on-surface/50 mb-1">PRINCIPAL:</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;SBI PORTD, PD0</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;CALL ATRASO</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;CBI PORTD, PD0</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;CALL ATRASO</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;RJMP PRINCIPAL</div>
+            </div>
+            <p class="text-on-surface-variant text-sm font-body leading-relaxed">
+              Para implementar a rotina de atraso utilizaremos a informação de que o μC ATmega328P opera a 
+              16 MHz, ou seja, para gerarmos um atraso próximo de 1 s precisamos ocupar cerca de 16.000.000 
+              ciclos de clock...
+            </p>
+            <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5 my-3">
+              <div class="text-on-surface/50 mb-1">ATRASO:</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;LDI R17, 82</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;L17:</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LDI R18, 255</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;L18:</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LDI R19, 255</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;L19:</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEC R19</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BRNE L19</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEC R18</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BRNE L18</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEC R17</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BRNE L17</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;RET</div>
+            </div>
+
+            <div class="bg-surface-container-low rounded-lg p-3 mt-3">
+              <img src="img/blink.png" alt="Circuito LED-GND" class="w-full h-auto rounded-lg object-cover">
+            </div>
+
+
+          </div>
+        
+          <button class="expand-btn" id="btn-3" onclick="toggleCard('3')">
+            Ver mais
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+        </div>
+
+         <!-----------------------------------------------------Step 4 --------------------------------------------------------->
+
+
+        <div class="relative p-8 bg-surface-container-lowest step-card rounded-xl border border-outline-variant/20 group" style="margin-top:1rem">
+          <div class="step-num">04</div>
+          <h4 class="text-xl font-headline text-primary mb-4">Contador-4bits</h4>
+        
+          <div class="step-card-body" id="body-4">
+            <p class="text-on-surface-variant text-sm font-body leading-relaxed">
+                Primeiramente, iremos definir o DDRD para 0b11111111, para que todos os pinos de PORTD estejam 
+                na direção de output e limpar o registrador R16, que será utilizado como o contador principal.
+              </p>
+
+              <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5 my-3">
+                <div class="text-on-surface/50 mb-1">INICIO:</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;LDI R16, 0b11111111</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;OUT DDRD, R16</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;LDI R16, 0b00000000</div>
+              </div>
+
+              <p class="text-on-surface-variant text-sm font-body leading-relaxed">
+                Para a nossa rotina principal, iremos primeiramente realizar o output do número que está armazenado 
+                em R16 em PORTD, após isso chamaremos a nossa subrotina de atraso e de incrementação de R16, 
+                por fim, um RJMP é utilizado para manter a rotina em loop.
+              </p>
+
+              <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5 my-3">
+                <div class="text-on-surface/50 mb-1">PRINCIPAL:</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;OUT PORTD, R16</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;CALL ATRASO</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;CALL INCREMENTAR</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;RJMP PRINCIPAL</div>
+              </div>
+
+              <p class="text-on-surface-variant text-sm font-body leading-relaxed">
+                Para implementar a rotina de incrementar R16, iremos primeiramente verificar se ele já está em 
+                seu valor limite, se sim, a rotina de zerar R16 será utilizada, se não, R16 será incrementado em 1.
+              </p>
+
+              <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5 my-3">
+                <div class="text-on-surface/50 mb-1">INCREMENTAR:</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;CPI R16, 15</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;BREQ ZERAR</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INC R16</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RET</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;ZERAR:</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LDI R16, 0</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RET</div>
+              </div>
+
+              <p class="text-on-surface-variant text-sm font-body leading-relaxed">
+                Para implementar a rotina de atraso utilizaremos a informação de que o μC ATmega328P opera a 
+                16 MHz, ou seja, para gerarmos um atraso próximo de 1 s precisamos ocupar cerca de 16.000.000 
+                ciclos de clock. Para isso utilizamos a instrução <code class="text-secondary font-mono">DEC Rx</code>, 
+                que decrementa um registrador em 1 ciclo de clock, e o desvio condicional 
+                <code class="text-secondary font-mono">BRNE Lx</code>, que retorna ao rótulo enquanto o registrador 
+                ainda não for zero, consumindo 2 ciclos de clock quando o salto ocorre. Com a escolha dos valores 
+                iniciais <code class="text-secondary font-mono">R17 = 82</code>, 
+                <code class="text-secondary font-mono">R18 = 255</code> e 
+                <code class="text-secondary font-mono">R19 = 255</code>, formamos três laços aninhados cuja 
+                execução completa acumula aproximadamente 15.996.150 
+                (<code class="text-secondary font-mono">255 * 255 * 82 * 3</code>) ciclos de clock, produzindo 
+                assim um atraso de aproximadamente 1 segundo.
+              </p>
+
+              <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5 my-3">
+                <div class="text-on-surface/50 mb-1">ATRASO:</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;LDI R17, 82</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;L17:</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LDI R18, 255</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;L18:</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LDI R19, 255</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;L19:</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEC R19</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BRNE L19</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEC R18</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BRNE L18</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEC R17</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BRNE L17</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;RET</div>
+              </div>
+
+              <p class="text-on-surface-variant text-sm font-body leading-relaxed">
+                <span class="text-on-surface-variant/60 text-xs">Observação:</span> 
+                <code class="text-secondary font-mono">BRNE Lx</code>, nesse caso, não precisa de uma instrução 
+                como <code class="text-secondary font-mono">CPI Rx, 0</code> antes pois ele, como dito na 
+                introdução, verifica sempre a Flag Z do SREG, então ele voltará para Lx sempre que o decremento 
+                não resultou em 0.
+              </p>
+
+
+            <div class="bg-surface-container-low rounded-lg p-3 mt-3">
+              <img src="img/4bits.png" alt="Circuito LED-GND" class="w-full h-auto rounded-lg object-cover">
+            </div>
+              
+        </div>
+          <button class="expand-btn" id="btn-4" onclick="toggleCard('4')">
+            Ver mais
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        
+        <!-----------------------------------------------------Step 5 --------------------------------------------------------->
+
+
+        <div class="relative p-8 bg-surface-container-lowest step-card rounded-xl border border-outline-variant/20 group" style="margin-top:1rem">
+          <div class="step-num">05</div>
+          <h4 class="text-xl font-headline text-primary mb-4">Contador-Decimal</h4>
+        
+          <div class="step-card-body" id="body-5">
+            <p class="text-on-surface-variant text-sm font-body leading-relaxed">
+                Primeiramente, iremos definir o DDRB para 0b11111111, para que todos os pinos de PORTB estejam 
+                na direção de output e limpar o registrador R16, que será utilizado como o contador principal.
+              </p>
+
+              <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5 my-3">
+                <div class="text-on-surface/50 mb-1">INICIO:</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;LDI R16, 0b11111111</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;OUT DDRB, R16</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;LDI R16, 0b00000000</div>
+              </div>
+
+              <p class="text-on-surface-variant text-sm font-body leading-relaxed">
+                Para a nossa rotina principal, iremos primeiramente chamar a rotina de decodificação do número 
+                armazenado em R16 para logo em seguida realizar o output em PORTB do código BCD armazenado em R0. 
+                Após isso as rotinas de atraso e incrementar são chamadas e por fim RJMP é utilizado para manter 
+                a rotina em loop.
+              </p>
+
+              <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5 my-3">
+                <div class="text-on-surface/50 mb-1">PRINCIPAL:</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;CALL DECODIFICAR</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;OUT PORTB, R0</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;CALL ATRASO</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;CALL INCREMENTAR</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;RJMP PRINCIPAL</div>
+              </div>
+
+              <p class="text-on-surface-variant text-sm font-body leading-relaxed">
+                Para a rotina de decodificação é utilizada uma jump table de dados com os códigos BCD armazenados em binário.
+              </p>
+
+              <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5 my-3">
+                <div class="text-on-surface/50 mb-1">DECODIFICAR:</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;LDI ZH, HIGH(TABELA &lt;&lt; 1)</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;LDI ZL, LOW(TABELA &lt;&lt; 1)</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;ADD ZL, R16</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;BRCC LEITURA</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;INC ZH</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;LEITURA:</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LPM R0, Z</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;RET</div>
+                <div class="mt-2"></div>
+                <div class="text-on-surface/50 mb-1">TABELA:</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;.db 0b00111111, 0b00000110, 0b01011011, 0b01001111, 0b01100110</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;.db 0b01101101, 0b01111101, 0b00000111, 0b01111111, 0b01101111</div>
+              </div>
+
+              <p class="text-on-surface-variant text-sm font-body leading-relaxed">
+                Para implementar a rotina de atraso utilizaremos a informação de que o μC ATmega328P opera a 
+                16 MHz, ou seja, para gerarmos um atraso próximo de 1 s precisamos ocupar cerca de 16.000.000 
+                ciclos de clock. Para isso utilizamos a instrução <code class="text-secondary font-mono">DEC Rx</code>, 
+                que decrementa um registrador em 1 ciclo de clock, e o desvio condicional 
+                <code class="text-secondary font-mono">BRNE Lx</code>, que retorna ao rótulo enquanto o registrador 
+                ainda não for zero, consumindo 2 ciclos de clock quando o salto ocorre. Com a escolha dos valores 
+                iniciais <code class="text-secondary font-mono">R17 = 82</code>, 
+                <code class="text-secondary font-mono">R18 = 255</code> e 
+                <code class="text-secondary font-mono">R19 = 255</code>, formamos três laços aninhados cuja 
+                execução completa acumula aproximadamente 15.996.150 
+                (<code class="text-secondary font-mono">255 * 255 * 82 * 3</code>) ciclos de clock, produzindo 
+                assim um atraso de aproximadamente 1 segundo.
+              </p>
+
+              <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5 my-3">
+                <div class="text-on-surface/50 mb-1">ATRASO:</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;LDI R17, 82</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;L17:</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LDI R18, 255</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;L18:</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LDI R19, 255</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;L19:</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEC R19</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BRNE L19</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEC R18</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BRNE L18</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEC R17</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BRNE L17</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;RET</div>
+              </div>
+
+              <p class="text-on-surface-variant text-sm font-body leading-relaxed">
+                <span class="text-on-surface-variant/60 text-xs">Observação:</span> 
+                <code class="text-secondary font-mono">BRNE Lx</code>, nesse caso, não precisa de uma instrução 
+                como <code class="text-secondary font-mono">CPI Rx, 0</code> antes pois ele, como dito na 
+                introdução, verifica sempre a Flag Z do SREG, então ele voltará para Lx sempre que o decremento 
+                não resultou em 0.
+              </p>
+
+              <p class="text-on-surface-variant text-sm font-body leading-relaxed">
+                Para implementar a rotina de incrementar R16, iremos primeiramente verificar se ele já está em 
+                seu valor limite, se sim, a rotina de zerar R16 será utilizada, se não, R16 será incrementado em 1.
+              </p>
+
+              <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5 my-3">
+                <div class="text-on-surface/50 mb-1">INCREMENTAR:</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;CPI R16, 15</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;BREQ ZERAR</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INC R16</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RET</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;ZERAR:</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LDI R16, 0</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RET</div>
+              </div>
+            
+              <div class="bg-surface-container-low rounded-lg p-3 mt-3">
+              <img src="img/decimal.png" alt="Circuito LED-GND" class="w-full h-auto rounded-lg object-cover">
+            </div>
+
+            </div>
+        
+          <button class="expand-btn" id="btn-5" onclick="toggleCard('5')">
+            Ver mais
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+        </div>
+       
+       
+         <!-----------------------------------------------------Step 6 --------------------------------------------------------->
+
+
+
+          <div class="relative p-8 bg-surface-container-lowest step-card rounded-xl border border-outline-variant/20 group" style="margin-top:1rem">
+          <div class="step-num">06</div>
+          <h4 class="text-xl font-headline text-primary mb-4">Botao-INC/DEC</h4>
+        
+          <div class="step-card-body" id="body-6">
+            <p class="text-on-surface-variant text-sm font-body leading-relaxed">
+              Primeiramente, configuraremos DDRB para input e DDRD para output e ativaremos a função de pullup 
+              em PD0 e PD1, após isso, definimos R16 para 0, já que esse será nosso contador e chamamos a rotina 
+              de decodificação, para inicializarmos o display como o número 0.
+            </p>
+
+            <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5 my-3">
+              <div class="text-on-surface/50 mb-1">INICIO:</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;LDI R16, 0b11111111</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;OUT DDRB, R16</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;LDI R16, 0b00000000</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;OUT DDRD, R16</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;LDI R16, 0b00000011</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;OUT PORTD, R16</div>
+              <div class="mt-2"></div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;LDI R16, 0</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;CALL DECODIFICAR</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;OUT PORTB, R0</div>
+            </div>
+
+            <p class="text-on-surface-variant text-sm font-body leading-relaxed">
+              Para a rotina principal com dois botões, implementamos quatro subrotinas: 
+              <code class="text-secondary font-mono">INC_SOLTO</code> e <code class="text-secondary font-mono">INC_PRESSIONADO</code> 
+              para o botão de incremento (PD0), e <code class="text-secondary font-mono">DEC_SOLTO</code> e 
+              <code class="text-secondary font-mono">DEC_PRESSIONADO</code> para o botão de decremento (PD1). 
+              A lógica segue o mesmo princípio utilizado anteriormente: nas subrotinas "SOLTO", utilizamos 
+              <code class="text-secondary font-mono">SBIC</code> para verificar quando o pino correspondente 
+              estiver em nível alto, mantendo o programa em espera até que o botão seja pressionado. Nas 
+              subrotinas "PRESSIONADO", aplicamos <code class="text-secondary font-mono">SBIS</code> para 
+              detectar quando o pino retornar ao nível alto, indicando que o botão foi solto. Quando isso 
+              ocorre, executamos a rotina apropriada — INCREMENTAR ou DECREMENTAR — seguido da decodificação 
+              e envio do valor para PORTB. Como agora há dois botões independentes, é necessário alternar a 
+              lógica de detecção entre eles: sempre que um botão é solto, a execução retorna à sua rotina de 
+              "solto", mas também verifica se o outro botão foi pressionado, garantindo que a navegação entre 
+              os dois fluxos (incremento e decremento) seja contínua e responsiva ao estado atual de cada entrada.
+            </p>
+
+            <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5 my-3">
+              <div class="text-on-surface/50 mb-1">PRINCIPAL:</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;INC_SOLTO:</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SBIC PIND, PD0</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RJMP DEC_SOLTO</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RJMP INC_PRESSIONADO</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;INC_PRESSIONADO:</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SBIS PIND, PD0</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RJMP INC_PRESSIONADO</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL INCREMENTAR</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL DECODIFICAR</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OUT PORTB, R0</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RJMP INC_SOLTO</div>
+              <div class="mt-2"></div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;DEC_SOLTO:</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SBIC PIND, PD1</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RJMP INC_SOLTO</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RJMP DEC_PRESSIONADO</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;DEC_PRESSIONADO:</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SBIS PIND, PD1</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RJMP DEC_PRESSIONADO</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL DECREMENTAR</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL DECODIFICAR</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OUT PORTB, R0</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RJMP DEC_SOLTO</div>
+            </div>
+
+            <p class="text-on-surface-variant text-sm font-body leading-relaxed">
+              Para a rotina de decodificação é utilizada uma jump table de dados com os códigos BCD armazenados em binário.
+            </p>
+
+            <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5 my-3">
+              <div class="text-on-surface/50 mb-1">DECODIFICAR:</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;LDI ZH, HIGH(TABELA &lt;&lt; 1)</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;LDI ZL, LOW(TABELA &lt;&lt; 1)</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;ADD ZL, R16</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;BRCC LEITURA</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;INC ZH</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;LEITURA:</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LPM R0, Z</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;RET</div>
+              <div class="mt-2"></div>
+              <div class="text-on-surface/50 mb-1">TABELA:</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;.db 0b00111111, 0b00000110, 0b01011011, 0b01001111, 0b01100110</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;.db 0b01101101, 0b01111101, 0b00000111, 0b01111111, 0b01101111</div>
+            </div>
+
+            <p class="text-on-surface-variant text-sm font-body leading-relaxed">
+              Para implementar a rotina de incrementar R16, iremos primeiramente verificar se ele já está em 
+              seu valor limite, se sim, a rotina de zerar R16 será utilizada, se não, R16 será incrementado em 1.
+            </p>
+
+            <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5 my-3">
+              <div class="text-on-surface/50 mb-1">INCREMENTAR:</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;CPI R16, 9</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;BREQ ZERAR</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INC R16</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RET</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;ZERAR:</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LDI R16, 0</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RET</div>
+            </div>
+
+            <p class="text-on-surface-variant text-sm font-body leading-relaxed">
+              Para implementar a rotina de decrementar R16, iremos primeiramente verificar se ele já está em 
+              seu valor limite, se sim, a rotina de maximizar R16 será utilizada, se não, R16 será decrementado em 1.
+            </p>
+
+            <div class="bg-surface rounded-lg p-3 font-mono text-xs text-on-surface leading-5 my-3">
+              <div class="text-on-surface/50 mb-1">DECREMENTAR:</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;CPI R16, 0</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;BREQ MAXIMIZAR</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEC R16</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RET</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;MAXIMIZAR:</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LDI R16, 9</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RET</div>
+            </div>
+
+            <div class="bg-surface-container-low rounded-lg p-3 mt-3">
+              <img src="img/incdec.png" alt="Circuito LED-GND" class="w-full h-auto rounded-lg object-cover">
+            </div>
+
+          </div>
+        
+          <button class="expand-btn" id="btn-6" onclick="toggleCard('6')">
+            Ver mais
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+        </div>
+
+
+      
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════
+     MATERIAL 
+══════════════════ -->
+<section class="py-24 px-8 max-w-7xl mx-auto" id="material">
+  <div class="material-cta p-12 lg:p-20 relative overflow-hidden rounded-xl">
+
+    <div class="relative z-10 flex flex-col lg:flex-row justify-between items-center gap-12">
+
+      <div class="max-w-xl text-center lg:text-left">
+        <span class="text-tertiary uppercase tracking-widest text-xs font-label font-bold">Recursos</span>
+        <h2 class="text-4xl font-headline text-on-primary mb-6 mt-2">Material de Apoio Digital</h2>
+        <p class="text-on-primary-container text-lg font-body leading-relaxed">
+          Acesse os repositórios oficiais, videoaulas e fóruns de discussão para acelerar seu aprendizado em PSB.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-3 gap-4 w-full lg:w-auto">
+        <a class="bg-white/8 hover:bg-white/15 p-6 rounded-xl text-on-primary transition-all flex flex-col items-center gap-3 border border-white/10 group" href="https://drive.google.com/drive/folders/1Rs8MgN0UxIAuQG0xZMGsd9Cd2IswS3NV?usp=sharing">
+          <span class="material-symbols-outlined text-tertiary-fixed text-2xl group-hover:scale-110 transition-transform">description</span>
+          <span class="font-label font-medium text-sm">Materiais <br>   Extra</span>
+        </a>
+        <a class="bg-white/8 hover:bg-white/15 p-6 rounded-xl text-on-primary transition-all flex flex-col items-center gap-3 border border-white/10 group" href="https://www.youtube.com/watch?v=G6xD6nZowBw&list=PLgQWT5lbdeggN-FQgRenW1UhV0NcMxYPm">
+          <span class="material-symbols-outlined text-tertiary-fixed text-2xl group-hover:scale-110 transition-transform">smart_display</span>
+          <span class="font-label font-medium text-sm">Playlist</span>
+        </a>
+        <a class="bg-white/8 hover:bg-white/15 p-6 rounded-xl text-on-primary transition-all flex flex-col items-center gap-3 border border-white/10 group" href="https://github.com/g-barreto00/Site-PSB">
+          <span class="material-symbols-outlined text-tertiary-fixed text-2xl group-hover:scale-110 transition-transform">code</span>
+          <span class="font-label font-medium text-sm">GitHub</span>
+        </a>
+        
+      </div>
+
+    </div>
+
+    <!-- Decorativas -->
+    <div class="absolute top-0 right-0 w-64 h-64 bg-secondary/10 rounded-full -mr-32 -mt-32 blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 w-64 h-64 bg-primary-container/40 rounded-full -ml-32 -mb-32 blur-3xl pointer-events-none"></div>
+  </div>
+</section>
+
+</main>
+
+
+<!-- ══════════════════
+     FOOTER 
+══════════════════ -->
+<footer class="w-full py-8 px-6 border-t border-outline-variant/20 bg-surface-container-low">
+  <div class="max-w-7xl mx-auto text-center text-sm text-on-surface-variant font-body leading-relaxed">
+
+    <p>
+      © 2026 PSB · UFBA — Projeto acadêmico independente. All rights reserved.
+    </p>
+
+    <p class="mt-2">
+      v1.0.0 · Devs:
+      <a href="https://www.linkedin.com/in/augustocfq/" target="_blank" class="hover:text-primary underline">Augusto Cesar Quadros</a>,
+      <a href="https://www.linkedin.com/in/danielbcsantana" target="_blank" class="hover:text-primary underline">Daniel Santana</a>,
+      <a href="https://www.linkedin.com/in/davi-guimarães-de-freitas-6b71652b9/" target="_blank" class="hover:text-primary underline">Davi Guimarães</a>
+      <a href="https://www.linkedin.com/in/felipeanunciacao" target="_blank" class="hover:text-primary underline">Felipe Anunciação</a>,
+      <a href="https://www.linkedin.com/in/gabriel-batista-barreto-71b64b325" target="_blank" class="hover:text-primary underline">Gabriel Barreto</a>,
+      <a href="https://github.com/Ph3Dias" target="_blank" class="hover:text-primary underline">Pedro Henrique Dias</a>
+    </p>
+
+  </div>
+</footer>
+
+
+<script>
+  function toggleAcc(btn) {
+    const content = btn.nextElementSibling;
+    const arrow = btn.querySelector('.acc-arrow');
+    const isOpen = content.style.display === 'block';
+    content.style.display = isOpen ? 'none' : 'block';
+    arrow.classList.toggle('open', !isOpen);
+    
+  }
+
+  function toggleCard(id) {
+  const body = document.getElementById('body-' + id);
+  const btn  = document.getElementById('btn-' + id);
+  const isExpanded = body.classList.toggle('expanded');
+  btn.classList.toggle('open', isExpanded);
+  btn.childNodes[0].textContent = isExpanded ? 'Ver menos ' : 'Ver mais ';
+}
+
+function toggleMenu() {
+  const menu = document.getElementById('mobile-menu');
+  if (menu.classList.contains('hidden')) {
+    menu.classList.remove('hidden');
+    menu.classList.add('flex');
+    menu.style.maxHeight = '0';
+    menu.style.overflow = 'hidden';
+    menu.style.transition = 'max-height 0.3s ease';
+    requestAnimationFrame(() => {
+      menu.style.maxHeight = '300px';
+    });
+  } else {
+    menu.style.maxHeight = '0';
+    setTimeout(() => {
+      menu.classList.add('hidden');
+      menu.classList.remove('flex');
+    }, 300);
+  }
+}
+</script>
+</body>
+</html>

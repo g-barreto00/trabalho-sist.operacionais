@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<title>Sistemas Operacionais — Hub Acadêmico</title>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "surface-dim": "#dadad5",
+          "on-primary-fixed-variant": "#2a4386",
+          "inverse-primary": "#b3c5ff",
+          "outline-variant": "#c5c6d2",
+          "on-surface": "#1a1c19",
+          "surface-bright": "#fafaf5",
+          "primary-container": "#002366",
+          "surface-variant": "#e3e3de",
+          "surface-tint": "#435b9f",
+          "surface-container-highest": "#e3e3de",
+          "error": "#ba1a1a",
+          "on-secondary": "#ffffff",
+          "on-primary": "#ffffff",
+          "secondary-container": "#fe5f6b",
+          "primary": "#00113a",
+          "surface-container-lowest": "#ffffff",
+          "surface-container-low": "#f4f4ef",
+          "primary-fixed": "#dbe1ff",
+          "on-tertiary": "#ffffff",
+          "on-error": "#ffffff",
+          "on-primary-container": "#758dd5",
+          "primary-fixed-dim": "#b3c5ff",
+          "inverse-on-surface": "#f1f1ec",
+          "on-tertiary-container": "#493f00",
+          "tertiary-fixed-dim": "#dac769",
+          "surface-container": "#eeeee9",
+          "on-secondary-container": "#640014",
+          "tertiary-container": "#bdab51",
+          "surface-container-high": "#e8e8e3",
+          "secondary-fixed": "#ffdad9",
+          "error-container": "#ffdad6",
+          "on-surface-variant": "#444650",
+          "tertiary": "#6c5e06",
+          "surface": "#fafaf5",
+          "secondary": "#b22738",
+          "outline": "#757682",
+          "on-error-container": "#93000a",
+          "background": "#fafaf5"
+        },
+        fontFamily: {
+          "headline": ["Noto Serif", "serif"],
+          "body": ["Work Sans", "sans-serif"],
+          "label": ["Work Sans", "sans-serif"]
+        },
+        borderRadius: {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  }
+  body {
+    background-color: #fafaf5;
+    color: #1a1c19;
+    font-family: 'Work Sans', sans-serif;
+  }
+  h1, h2, h3, h4 { font-family: 'Noto Serif', serif; }
+  nav {
+    background: rgba(250,250,245,.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+  .module-card {
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+    border: 1px solid rgba(197,198,210,0.35);
+  }
+  .module-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px rgba(26,28,25,0.08);
+  }
+  .sim-card {
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+    border: 1px solid rgba(197,198,210,0.4);
+  }
+  .sim-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(26,28,25,0.1);
+  }
+  .acc-body { display: none; }
+  .acc-body.open { display: block; }
+  .acc-arrow { transition: transform 0.2s; display: inline-block; }
+  .acc-arrow.open { transform: rotate(180deg); }
+  code {
+    font-family: 'Courier New', monospace;
+    background: rgba(0,17,58,0.07);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 0.88em;
+    color: #00113a;
+  }
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: #f4f4ef; }
+  ::-webkit-scrollbar-thumb { background: #c5c6d2; border-radius: 3px; }
+  html { scroll-behavior: smooth; }
+  #mobile-menu { overflow: hidden; transition: max-height 0.3s ease; }
+</style>
+</head>
+<body class="bg-background text-on-surface">
+
+<!-- ══════════════════ NAV ══════════════════ -->
+<nav class="fixed top-0 w-full z-50 border-b border-outline-variant/20">
+  <div class="flex justify-between items-center px-6 md:px-8 py-4 max-w-7xl mx-auto">
+    <div class="flex items-center gap-4">
+      <a href="../index.html" class="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors text-sm font-body">
+        <span class="material-symbols-outlined" style="font-size:1rem">arrow_back</span>
+        Hub
+      </a>
+      <span class="text-outline-variant select-none">·</span>
+      <div class="font-headline font-bold text-xl text-primary">
+        Sistemas <span class="text-secondary italic font-normal">Operacionais</span>
+      </div>
+    </div>
+    <div class="hidden md:flex gap-8 items-center">
+      <a class="text-on-surface-variant hover:text-primary transition-colors font-headline text-base tracking-tight" href="#intro">Introdução</a>
+      <a class="text-on-surface-variant hover:text-primary transition-colors font-headline text-base tracking-tight" href="#conceitos">Conceitos</a>
+      <a class="text-on-surface-variant hover:text-primary transition-colors font-headline text-base tracking-tight" href="#escalonamento">Escalonamento</a>
+      <a class="text-on-surface-variant hover:text-primary transition-colors font-headline text-base tracking-tight" href="#simuladores">Simuladores</a>
+    </div>
+    <button class="md:hidden text-primary" onclick="toggleMenu()">
+      <span class="material-symbols-outlined">menu</span>
+    </button>
+    <div id="mobile-menu" class="hidden bg-background border-t border-outline-variant/20 px-6 py-4 flex-col gap-4">
+      <a class="text-on-surface-variant font-headline text-base" href="../index.html">← Hub Acadêmico</a>
+      <a class="text-on-surface-variant font-headline text-base" href="#intro">Introdução</a>
+      <a class="text-on-surface-variant font-headline text-base" href="#conceitos">Conceitos</a>
+      <a class="text-on-surface-variant font-headline text-base" href="#escalonamento">Escalonamento</a>
+      <a class="text-on-surface-variant font-headline text-base" href="#simuladores">Simuladores</a>
+    </div>
+  </div>
+</nav>
+
+<main class="pt-20">
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<section class="relative min-h-[480px] flex items-center px-6 md:px-8 max-w-7xl mx-auto overflow-hidden py-16" id="intro">
+  <div class="z-10 w-full lg:max-w-2xl">
+    <span class="text-tertiary uppercase tracking-[0.18em] font-label font-medium text-xs mb-5 block">
+      Disciplina · Ciência da Computação
+    </span>
+    <h1 class="text-[2.4rem] sm:text-[3rem] md:text-[3.6rem] font-headline font-bold text-primary leading-[1.06] mb-6">
+      Sistemas<br/>Operacionais
+    </h1>
+    <p class="text-base text-on-surface-variant font-body leading-relaxed mb-10 max-w-xl">
+      Estudo dos mecanismos que gerenciam o hardware de um computador e fornecem serviços para programas de aplicação: processos, threads, memória, sistemas de arquivos e escalonamento.
+    </p>
+    <div class="flex flex-wrap gap-4">
+      <a href="#conceitos" class="bg-primary text-on-primary px-7 py-3.5 rounded-lg font-body font-semibold flex items-center gap-2 hover:scale-[1.02] transition-transform text-sm">
+        Ver Conteúdo
+        <span class="material-symbols-outlined text-base">arrow_downward</span>
+      </a>
+      <a href="#simuladores" class="border border-outline-variant/40 text-primary px-7 py-3.5 rounded-lg font-body font-semibold flex items-center gap-2 hover:bg-surface-container-low transition-colors text-sm">
+        Simuladores
+        <span class="material-symbols-outlined text-base">computer</span>
+      </a>
+    </div>
+  </div>
+  <!-- Decorative element -->
+  <div class="absolute right-0 top-1/2 -translate-y-1/2 w-[42%] hidden lg:flex items-center justify-center">
+    <div class="grid grid-cols-2 gap-4 opacity-20">
+      <div class="w-24 h-24 bg-primary rounded-xl"></div>
+      <div class="w-24 h-24 bg-secondary rounded-xl mt-8"></div>
+      <div class="w-24 h-24 bg-tertiary rounded-xl"></div>
+      <div class="w-24 h-24 bg-primary-container rounded-xl mt-8"></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════ TÓPICOS CARD GRID ══════════════════ -->
+<section class="py-20 bg-surface-container-low" id="conceitos">
+  <div class="max-w-7xl mx-auto px-8">
+    <div class="mb-14">
+      <span class="text-tertiary uppercase tracking-widest text-xs font-label font-bold">Módulo 01</span>
+      <h2 class="text-4xl font-headline text-primary mt-2">Conceitos Fundamentais</h2>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+
+      <a href="#sec-processos" class="module-card group block bg-surface-container-lowest p-8 rounded-xl">
+        <span class="material-symbols-outlined text-4xl text-secondary mb-6 block">hub</span>
+        <h3 class="text-xl font-headline text-primary mb-4">Processos</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-6">
+          Um processo é um programa em execução. Possui seu próprio espaço de endereçamento, estado, e recursos alocados pelo SO.
+        </p>
+        <div class="flex items-center text-primary text-xs font-label font-bold uppercase tracking-wider gap-1">
+          Explorar
+          <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+        </div>
+      </a>
+
+      <a href="#sec-threads" class="module-card group block bg-surface-container-lowest p-8 rounded-xl">
+        <span class="material-symbols-outlined text-4xl text-secondary mb-6 block">fork_right</span>
+        <h3 class="text-xl font-headline text-primary mb-4">Threads</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-6">
+          Threads são unidades de execução dentro de um processo. Compartilham memória e recursos, permitindo concorrência eficiente.
+        </p>
+        <div class="flex items-center text-primary text-xs font-label font-bold uppercase tracking-wider gap-1">
+          Explorar
+          <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+        </div>
+      </a>
+
+      <a href="#escalonamento" class="module-card group block bg-surface-container-lowest p-8 rounded-xl">
+        <span class="material-symbols-outlined text-4xl text-secondary mb-6 block">schedule</span>
+        <h3 class="text-xl font-headline text-primary mb-4">Escalonamento</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-6">
+          Algoritmos de escalonamento determinam a ordem em que processos recebem tempo de CPU: FIFO, SJF, Round Robin e outros.
+        </p>
+        <div class="flex items-center text-primary text-xs font-label font-bold uppercase tracking-wider gap-1">
+          Explorar
+          <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+        </div>
+      </a>
+
+      <a href="#simuladores" class="module-card group block bg-surface-container-lowest p-8 rounded-xl">
+        <span class="material-symbols-outlined text-4xl text-secondary mb-6 block">computer</span>
+        <h3 class="text-xl font-headline text-primary mb-4">Simuladores</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-6">
+          Ferramentas interativas para visualizar e experimentar os algoritmos estudados na prática, com Gantt e métricas em tempo real.
+        </p>
+        <div class="flex items-center text-primary text-xs font-label font-bold uppercase tracking-wider gap-1">
+          Acessar
+          <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════ PROCESSOS ══════════════════ -->
+<section class="py-20 bg-background" id="sec-processos">
+  <div class="max-w-7xl mx-auto px-8">
+    <div class="mb-14">
+      <span class="text-tertiary uppercase tracking-widest text-xs font-label font-bold">Módulo 02</span>
+      <h2 class="text-4xl font-headline text-primary mt-2">Processos</h2>
+      <p class="text-on-surface-variant mt-3 max-w-2xl font-body leading-relaxed">
+        O modelo de processo é a abstração central dos sistemas operacionais modernos.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+      <!-- Accordion de processos -->
+      <div class="space-y-3">
+
+        <div class="bg-surface-container-lowest border border-outline-variant/25 rounded-xl overflow-hidden">
+          <button onclick="toggleAcc(this)" class="w-full flex items-center justify-between p-6 text-left">
+            <div class="flex items-center gap-4">
+              <span class="w-8 h-8 bg-primary/8 rounded-lg flex items-center justify-center flex-shrink-0">
+                <span class="text-secondary font-headline font-bold text-sm">01</span>
+              </span>
+              <span class="font-headline text-primary text-lg">O que é um Processo?</span>
+            </div>
+            <span class="material-symbols-outlined acc-arrow text-on-surface-variant text-xl">expand_more</span>
+          </button>
+          <div class="acc-body px-6 pb-6">
+            <div class="pl-12 space-y-3 text-on-surface-variant font-body text-sm leading-relaxed">
+              <p>Um <strong class="text-primary">processo</strong> é uma instância de um programa em execução. Enquanto o programa é um arquivo estático em disco, o processo é dinâmico — possui estado, contador de programa e pilha próprios.</p>
+              <p>Cada processo contém:</p>
+              <ul class="list-disc pl-5 space-y-1">
+                <li><strong class="text-primary">Código (text)</strong> — instruções do programa</li>
+                <li><strong class="text-primary">Dados (data/heap)</strong> — variáveis globais e alocação dinâmica</li>
+                <li><strong class="text-primary">Pilha (stack)</strong> — variáveis locais e retorno de funções</li>
+                <li><strong class="text-primary">PCB</strong> — Process Control Block com metadados do SO</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-surface-container-lowest border border-outline-variant/25 rounded-xl overflow-hidden">
+          <button onclick="toggleAcc(this)" class="w-full flex items-center justify-between p-6 text-left">
+            <div class="flex items-center gap-4">
+              <span class="w-8 h-8 bg-primary/8 rounded-lg flex items-center justify-center flex-shrink-0">
+                <span class="text-secondary font-headline font-bold text-sm">02</span>
+              </span>
+              <span class="font-headline text-primary text-lg">Estados de um Processo</span>
+            </div>
+            <span class="material-symbols-outlined acc-arrow text-on-surface-variant text-xl">expand_more</span>
+          </button>
+          <div class="acc-body px-6 pb-6">
+            <div class="pl-12 space-y-3 text-on-surface-variant font-body text-sm leading-relaxed">
+              <p>Um processo transita entre estados ao longo de sua vida:</p>
+              <div class="grid grid-cols-1 gap-2 mt-2">
+                <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
+                  <span class="w-2 h-2 bg-secondary rounded-full mt-1.5 flex-shrink-0"></span>
+                  <div><strong class="text-primary">Novo (New)</strong> — processo foi criado</div>
+                </div>
+                <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
+                  <span class="w-2 h-2 bg-primary rounded-full mt-1.5 flex-shrink-0"></span>
+                  <div><strong class="text-primary">Pronto (Ready)</strong> — aguardando a CPU</div>
+                </div>
+                <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
+                  <span class="w-2 h-2 bg-tertiary rounded-full mt-1.5 flex-shrink-0"></span>
+                  <div><strong class="text-primary">Executando (Running)</strong> — usando a CPU agora</div>
+                </div>
+                <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
+                  <span class="w-2 h-2 bg-outline rounded-full mt-1.5 flex-shrink-0"></span>
+                  <div><strong class="text-primary">Bloqueado (Waiting)</strong> — esperando I/O ou evento</div>
+                </div>
+                <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
+                  <span class="w-2 h-2 bg-error rounded-full mt-1.5 flex-shrink-0"></span>
+                  <div><strong class="text-primary">Terminado (Terminated)</strong> — execução concluída</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-surface-container-lowest border border-outline-variant/25 rounded-xl overflow-hidden">
+          <button onclick="toggleAcc(this)" class="w-full flex items-center justify-between p-6 text-left">
+            <div class="flex items-center gap-4">
+              <span class="w-8 h-8 bg-primary/8 rounded-lg flex items-center justify-center flex-shrink-0">
+                <span class="text-secondary font-headline font-bold text-sm">03</span>
+              </span>
+              <span class="font-headline text-primary text-lg">Troca de Contexto</span>
+            </div>
+            <span class="material-symbols-outlined acc-arrow text-on-surface-variant text-xl">expand_more</span>
+          </button>
+          <div class="acc-body px-6 pb-6">
+            <div class="pl-12 space-y-3 text-on-surface-variant font-body text-sm leading-relaxed">
+              <p>Quando a CPU passa de um processo para outro, o SO precisa salvar o estado do processo atual e restaurar o estado do próximo. Esse mecanismo é chamado de <strong class="text-primary">troca de contexto (context switch)</strong>.</p>
+              <p>O estado salvo inclui: registradores, contador de programa, ponteiro de pilha e flags. A troca de contexto tem custo — tempo em que a CPU não executa trabalho útil.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Info lateral -->
+      <div class="bg-surface-container-low rounded-xl p-6 border border-outline-variant/20 self-start">
+        <div class="text-tertiary font-label text-xs uppercase tracking-wider mb-5">Hierarquia de Processos</div>
+        <div class="space-y-4 text-sm font-body text-on-surface-variant">
+          <div class="bg-surface-container-lowest rounded-lg p-4">
+            <div class="font-headline text-primary font-bold mb-1">fork()</div>
+            Cria um processo filho idêntico ao pai. Pai e filho executam de forma independente após o fork.
+          </div>
+          <div class="bg-surface-container-lowest rounded-lg p-4">
+            <div class="font-headline text-primary font-bold mb-1">exec()</div>
+            Substitui o código do processo atual por um novo programa. Usado após <code>fork()</code> para executar um programa diferente.
+          </div>
+          <div class="bg-surface-container-lowest rounded-lg p-4">
+            <div class="font-headline text-primary font-bold mb-1">wait()</div>
+            Processo pai espera o filho terminar. Evita processos <em>zombie</em> (processos terminados sem coleta do status).
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════ THREADS ══════════════════ -->
+<section class="py-20 bg-surface-container-low" id="sec-threads">
+  <div class="max-w-7xl mx-auto px-8">
+    <div class="mb-14">
+      <span class="text-tertiary uppercase tracking-widest text-xs font-label font-bold">Módulo 03</span>
+      <h2 class="text-4xl font-headline text-primary mt-2">Threads</h2>
+      <p class="text-on-surface-variant mt-3 max-w-2xl font-body leading-relaxed">
+        Threads permitem que um único processo realize múltiplas tarefas concorrentemente.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <div class="bg-surface-container-lowest rounded-xl p-7 border border-outline-variant/25">
+        <span class="material-symbols-outlined text-3xl text-secondary mb-4 block">compare_arrows</span>
+        <h3 class="font-headline text-primary text-lg mb-3">Processo vs Thread</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-4">
+          Processos têm espaço de endereçamento independente. Threads de um mesmo processo <strong class="text-primary">compartilham memória</strong>, o que torna a comunicação mais rápida — mas exige sincronização cuidadosa.
+        </p>
+        <div class="text-xs text-on-surface-variant bg-surface-container-low rounded-lg p-3">
+          <div class="grid grid-cols-2 gap-2">
+            <div><strong class="text-primary block mb-1">Processo</strong>Isolado<br/>Lento p/ criar<br/>IPC necessário</div>
+            <div><strong class="text-secondary block mb-1">Thread</strong>Compartilhado<br/>Rápido p/ criar<br/>Memória direta</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-surface-container-lowest rounded-xl p-7 border border-outline-variant/25">
+        <span class="material-symbols-outlined text-3xl text-secondary mb-4 block">layers</span>
+        <h3 class="font-headline text-primary text-lg mb-3">Modelos de Thread</h3>
+        <div class="space-y-3 text-sm font-body text-on-surface-variant">
+          <div class="bg-surface-container-low rounded-lg p-3">
+            <strong class="text-primary">Many-to-One</strong>
+            <p class="mt-1">Várias threads de usuário mapeadas para um único thread de kernel. Simples, mas sem paralelismo real.</p>
+          </div>
+          <div class="bg-surface-container-low rounded-lg p-3">
+            <strong class="text-primary">One-to-One</strong>
+            <p class="mt-1">Cada thread de usuário tem um thread de kernel. Mais paralelismo, mais overhead. Usado no Linux e Windows.</p>
+          </div>
+          <div class="bg-surface-container-low rounded-lg p-3">
+            <strong class="text-primary">Many-to-Many</strong>
+            <p class="mt-1">Vários threads de usuário mapeados para vários de kernel. Flexível, mas complexo de implementar.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-surface-container-lowest rounded-xl p-7 border border-outline-variant/25">
+        <span class="material-symbols-outlined text-3xl text-secondary mb-4 block">sync_lock</span>
+        <h3 class="font-headline text-primary text-lg mb-3">Sincronização</h3>
+        <div class="space-y-3 text-sm font-body text-on-surface-variant">
+          <p>O acesso concorrente a recursos compartilhados pode causar <strong class="text-primary">condições de corrida (race conditions)</strong>. As soluções incluem:</p>
+          <div class="bg-surface-container-low rounded-lg p-3">
+            <strong class="text-primary">Mutex</strong> — exclusão mútua; só uma thread acessa por vez.
+          </div>
+          <div class="bg-surface-container-low rounded-lg p-3">
+            <strong class="text-primary">Semáforo</strong> — contador que controla acesso a recursos limitados.
+          </div>
+          <div class="bg-surface-container-low rounded-lg p-3">
+            <strong class="text-primary">Monitor</strong> — abstração de alto nível com locks e variáveis de condição.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════ ESCALONAMENTO ══════════════════ -->
+<section class="py-20 bg-background" id="escalonamento">
+  <div class="max-w-7xl mx-auto px-8">
+    <div class="mb-14">
+      <span class="text-tertiary uppercase tracking-widest text-xs font-label font-bold">Módulo 04</span>
+      <h2 class="text-4xl font-headline text-primary mt-2">Algoritmos de Escalonamento</h2>
+      <p class="text-on-surface-variant mt-3 max-w-2xl font-body leading-relaxed">
+        O escalonador decide qual processo recebe a CPU. A escolha do algoritmo afeta diretamente o tempo de resposta, throughput e fairness.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+      <!-- FIFO -->
+      <div class="bg-surface-container-lowest border border-outline-variant/25 rounded-xl overflow-hidden">
+        <button onclick="toggleAcc(this)" class="w-full flex items-center justify-between p-6 text-left">
+          <div class="flex items-center gap-4">
+            <span class="w-8 h-8 bg-primary/8 rounded-lg flex items-center justify-center flex-shrink-0">
+              <span class="text-secondary font-headline font-bold text-sm">01</span>
+            </span>
+            <div>
+              <span class="font-headline text-primary text-lg">FIFO / FCFS</span>
+              <span class="ml-3 text-xs bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded-full font-label">Não-preemptivo</span>
+            </div>
+          </div>
+          <span class="material-symbols-outlined acc-arrow text-on-surface-variant text-xl">expand_more</span>
+        </button>
+        <div class="acc-body px-6 pb-6">
+          <div class="pl-12 space-y-3 text-on-surface-variant font-body text-sm leading-relaxed">
+            <p><strong class="text-primary">First In, First Out</strong> — o primeiro processo a chegar é o primeiro a ser executado. Simples de implementar, mas sofre do problema do <em>efeito comboio</em>: um processo longo bloqueia todos os outros.</p>
+            <div class="grid grid-cols-2 gap-3 mt-3">
+              <div class="bg-surface-container-low rounded-lg p-3">
+                <div class="text-xs text-tertiary font-bold uppercase tracking-wider mb-1">Vantagens</div>
+                <ul class="text-xs space-y-1">
+                  <li>✓ Simples de implementar</li>
+                  <li>✓ Sem starvation</li>
+                </ul>
+              </div>
+              <div class="bg-surface-container-low rounded-lg p-3">
+                <div class="text-xs text-secondary font-bold uppercase tracking-wider mb-1">Desvantagens</div>
+                <ul class="text-xs space-y-1">
+                  <li>✗ Efeito comboio</li>
+                  <li>✗ Espera média alta</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SJF -->
+      <div class="bg-surface-container-lowest border border-outline-variant/25 rounded-xl overflow-hidden">
+        <button onclick="toggleAcc(this)" class="w-full flex items-center justify-between p-6 text-left">
+          <div class="flex items-center gap-4">
+            <span class="w-8 h-8 bg-primary/8 rounded-lg flex items-center justify-center flex-shrink-0">
+              <span class="text-secondary font-headline font-bold text-sm">02</span>
+            </span>
+            <div>
+              <span class="font-headline text-primary text-lg">SJF — Shortest Job First</span>
+              <span class="ml-3 text-xs bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded-full font-label">Não-preemptivo</span>
+            </div>
+          </div>
+          <span class="material-symbols-outlined acc-arrow text-on-surface-variant text-xl">expand_more</span>
+        </button>
+        <div class="acc-body px-6 pb-6">
+          <div class="pl-12 space-y-3 text-on-surface-variant font-body text-sm leading-relaxed">
+            <p><strong class="text-primary">Shortest Job First</strong> — o processo com menor tempo de execução é selecionado primeiro. Minimiza o tempo médio de espera, sendo ótimo nesse critério. O problema é que o tempo de execução geralmente não é conhecido com antecedência.</p>
+            <div class="grid grid-cols-2 gap-3 mt-3">
+              <div class="bg-surface-container-low rounded-lg p-3">
+                <div class="text-xs text-tertiary font-bold uppercase tracking-wider mb-1">Vantagens</div>
+                <ul class="text-xs space-y-1">
+                  <li>✓ Minimiza espera média</li>
+                  <li>✓ Ótimo (se burst conhecido)</li>
+                </ul>
+              </div>
+              <div class="bg-surface-container-low rounded-lg p-3">
+                <div class="text-xs text-secondary font-bold uppercase tracking-wider mb-1">Desvantagens</div>
+                <ul class="text-xs space-y-1">
+                  <li>✗ Burst geralmente desconhecido</li>
+                  <li>✗ Starvation de processos longos</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prioridade -->
+      <div class="bg-surface-container-lowest border border-outline-variant/25 rounded-xl overflow-hidden">
+        <button onclick="toggleAcc(this)" class="w-full flex items-center justify-between p-6 text-left">
+          <div class="flex items-center gap-4">
+            <span class="w-8 h-8 bg-primary/8 rounded-lg flex items-center justify-center flex-shrink-0">
+              <span class="text-secondary font-headline font-bold text-sm">03</span>
+            </span>
+            <div>
+              <span class="font-headline text-primary text-lg">Prioridade</span>
+              <span class="ml-3 text-xs bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded-full font-label">Preemptivo</span>
+            </div>
+          </div>
+          <span class="material-symbols-outlined acc-arrow text-on-surface-variant text-xl">expand_more</span>
+        </button>
+        <div class="acc-body px-6 pb-6">
+          <div class="pl-12 space-y-3 text-on-surface-variant font-body text-sm leading-relaxed">
+            <p>Cada processo recebe uma <strong class="text-primary">prioridade numérica</strong>. O processo de maior prioridade sempre é executado. Pode ser estático (definido na criação) ou dinâmico (ajustado pelo SO). Risco de <em>starvation</em> — processos de baixa prioridade nunca executam.</p>
+            <p>A solução clássica para starvation é o <strong class="text-primary">envelhecimento (aging)</strong>: a prioridade de um processo aumenta progressivamente enquanto ele aguarda.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Round Robin -->
+      <div class="bg-surface-container-lowest border border-outline-variant/25 rounded-xl overflow-hidden">
+        <button onclick="toggleAcc(this)" class="w-full flex items-center justify-between p-6 text-left">
+          <div class="flex items-center gap-4">
+            <span class="w-8 h-8 bg-primary/8 rounded-lg flex items-center justify-center flex-shrink-0">
+              <span class="text-secondary font-headline font-bold text-sm">04</span>
+            </span>
+            <div>
+              <span class="font-headline text-primary text-lg">Round Robin</span>
+              <span class="ml-3 text-xs bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded-full font-label">Preemptivo</span>
+            </div>
+          </div>
+          <span class="material-symbols-outlined acc-arrow text-on-surface-variant text-xl">expand_more</span>
+        </button>
+        <div class="acc-body px-6 pb-6">
+          <div class="pl-12 space-y-3 text-on-surface-variant font-body text-sm leading-relaxed">
+            <p>Cada processo recebe um <strong class="text-primary">quantum</strong> de tempo fixo. Ao esgotar o quantum, o processo é preemptado e vai para o fim da fila, cedendo a CPU ao próximo. É o algoritmo base dos sistemas de tempo compartilhado.</p>
+            <p>A escolha do quantum é crítica: muito pequeno → muitas trocas de contexto; muito grande → degrada para FIFO.</p>
+            <div class="bg-surface-container-low rounded-lg p-3 mt-2">
+              <div class="text-xs text-tertiary font-bold uppercase tracking-wider mb-2">Critério de escolha do Quantum</div>
+              <p class="text-xs">Regra geral: 80% dos bursts de CPU devem ser menores que o quantum. Tipicamente entre 10 ms e 100 ms.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Tabela comparativa -->
+    <div class="mt-12">
+      <h3 class="font-headline text-primary text-2xl mb-6">Comparação Rápida</h3>
+      <div class="overflow-x-auto rounded-xl border border-outline-variant/25">
+        <table class="w-full text-sm font-body">
+          <thead class="bg-surface-container-low">
+            <tr>
+              <th class="text-left px-5 py-3 text-primary font-semibold">Algoritmo</th>
+              <th class="text-left px-5 py-3 text-primary font-semibold">Preemptivo</th>
+              <th class="text-left px-5 py-3 text-primary font-semibold">Espera Média</th>
+              <th class="text-left px-5 py-3 text-primary font-semibold">Starvation?</th>
+              <th class="text-left px-5 py-3 text-primary font-semibold">Uso típico</th>
+            </tr>
+          </thead>
+          <tbody class="bg-surface-container-lowest">
+            <tr class="border-t border-outline-variant/15">
+              <td class="px-5 py-3 font-semibold text-primary">FIFO/FCFS</td>
+              <td class="px-5 py-3">Não</td>
+              <td class="px-5 py-3 text-secondary">Alta</td>
+              <td class="px-5 py-3">Não</td>
+              <td class="px-5 py-3 text-on-surface-variant">Batch simples</td>
+            </tr>
+            <tr class="border-t border-outline-variant/15">
+              <td class="px-5 py-3 font-semibold text-primary">SJF</td>
+              <td class="px-5 py-3">Não</td>
+              <td class="px-5 py-3 text-tertiary">Mínima</td>
+              <td class="px-5 py-3 text-secondary">Sim</td>
+              <td class="px-5 py-3 text-on-surface-variant">Batch com burst conhecido</td>
+            </tr>
+            <tr class="border-t border-outline-variant/15">
+              <td class="px-5 py-3 font-semibold text-primary">Prioridade</td>
+              <td class="px-5 py-3">Sim</td>
+              <td class="px-5 py-3 text-on-surface-variant">Variável</td>
+              <td class="px-5 py-3 text-secondary">Sim</td>
+              <td class="px-5 py-3 text-on-surface-variant">Sistemas em tempo real</td>
+            </tr>
+            <tr class="border-t border-outline-variant/15">
+              <td class="px-5 py-3 font-semibold text-primary">Round Robin</td>
+              <td class="px-5 py-3">Sim</td>
+              <td class="px-5 py-3 text-on-surface-variant">Moderada</td>
+              <td class="px-5 py-3 text-tertiary">Não</td>
+              <td class="px-5 py-3 text-on-surface-variant">Sistemas interativos, Linux</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════ SIMULADORES ══════════════════ -->
+<section class="py-20 bg-surface-container-low" id="simuladores">
+  <div class="max-w-7xl mx-auto px-8">
+    <div class="mb-14">
+      <span class="text-tertiary uppercase tracking-widest text-xs font-label font-bold">Ferramentas Interativas</span>
+      <h2 class="text-4xl font-headline text-primary mt-2">Simuladores</h2>
+      <p class="text-on-surface-variant mt-3 max-w-2xl font-body leading-relaxed">
+        Visualize os algoritmos na prática. Experimente com diferentes configurações e observe o impacto no gráfico de Gantt e nas métricas de desempenho.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- Card: Simulador de Escalonamento -->
+      <a href="simuladores/escalonamento/index.html" class="sim-card group block bg-surface-container-lowest p-8 rounded-xl">
+        <div class="w-12 h-12 bg-primary/8 rounded-xl flex items-center justify-center mb-6">
+          <span class="material-symbols-outlined text-2xl text-primary">schedule</span>
+        </div>
+        <h3 class="text-xl font-headline text-primary mb-3">Escalonamento de Processos</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-6">
+          Simule FIFO, SJF, Round Robin, Prioridade, EDF e CFS com Gantt interativo, métricas globais e comparação de algoritmos.
+        </p>
+        <div class="flex items-center gap-3 flex-wrap mb-6">
+          <span class="text-xs bg-primary/8 text-primary px-2 py-1 rounded-full font-label">Gantt</span>
+          <span class="text-xs bg-secondary/10 text-secondary px-2 py-1 rounded-full font-label">7 algoritmos</span>
+          <span class="text-xs bg-tertiary/10 text-tertiary px-2 py-1 rounded-full font-label">Métricas</span>
+        </div>
+        <div class="flex items-center text-primary text-sm font-label font-bold gap-1 group-hover:gap-2 transition-all">
+          Abrir Simulador
+          <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
+        </div>
+      </a>
+
+      <!-- Card: Em breve — Paginação -->
+      <div class="sim-card block bg-surface-container-lowest p-8 rounded-xl opacity-60 cursor-not-allowed">
+        <div class="w-12 h-12 bg-surface-container-high rounded-xl flex items-center justify-center mb-6">
+          <span class="material-symbols-outlined text-2xl text-outline">storage</span>
+        </div>
+        <h3 class="text-xl font-headline text-on-surface-variant mb-3">Paginação de Memória</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-6">
+          Simulador de algoritmos de substituição de páginas: FIFO, LRU, Ótimo e Clock.
+        </p>
+        <span class="text-xs bg-surface-container-high text-on-surface-variant px-3 py-1 rounded-full font-label">Em breve</span>
+      </div>
+
+      <!-- Card: Em breve — Pipeline -->
+      <div class="sim-card block bg-surface-container-lowest p-8 rounded-xl opacity-60 cursor-not-allowed">
+        <div class="w-12 h-12 bg-surface-container-high rounded-xl flex items-center justify-center mb-6">
+          <span class="material-symbols-outlined text-2xl text-outline">account_tree</span>
+        </div>
+        <h3 class="text-xl font-headline text-on-surface-variant mb-3">Pipeline de Instruções</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-6">
+          Visualize o pipeline de execução de instruções e identifique hazards e stalls.
+        </p>
+        <span class="text-xs bg-surface-container-high text-on-surface-variant px-3 py-1 rounded-full font-label">Em breve</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer class="w-full py-8 px-6 border-t border-outline-variant/20 bg-surface-container-low">
+  <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-on-surface-variant font-body">
+    <div>
+      <a href="../index.html" class="hover:text-primary transition-colors font-headline font-bold text-base text-primary">Hub Acadêmico</a>
+      <span class="ml-2 text-outline">·</span>
+      <span class="ml-2">Sistemas Operacionais</span>
+    </div>
+    <p>© 2026 · Projeto acadêmico UFBA</p>
+  </div>
+</footer>
+
+</main>
+
+<script>
+  function toggleAcc(btn) {
+    const content = btn.nextElementSibling;
+    const arrow = btn.querySelector('.acc-arrow');
+    const isOpen = content.classList.contains('open');
+    content.classList.toggle('open', !isOpen);
+    arrow.classList.toggle('open', !isOpen);
+  }
+  function toggleMenu() {
+    const menu = document.getElementById('mobile-menu');
+    if (menu.classList.contains('hidden')) {
+      menu.classList.remove('hidden');
+      menu.classList.add('flex');
+      menu.style.maxHeight = '0';
+      requestAnimationFrame(() => { menu.style.maxHeight = '400px'; });
+    } else {
+      menu.style.maxHeight = '0';
+      setTimeout(() => { menu.classList.add('hidden'); menu.classList.remove('flex'); }, 300);
+    }
+  }
+</script>
+</body>
+</html>
