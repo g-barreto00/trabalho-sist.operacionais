@@ -302,30 +302,58 @@
             <span class="material-symbols-outlined acc-arrow text-on-surface-variant text-xl">expand_more</span>
           </button>
           <div class="acc-body px-6 pb-6">
-            <div class="pl-12 space-y-3 text-on-surface-variant font-body text-sm leading-relaxed">
-              <p>Um processo transita entre estados ao longo de sua vida:</p>
-              <div class="grid grid-cols-1 gap-2 mt-2">
+            <div class="pl-12 space-y-4 text-on-surface-variant font-body text-sm leading-relaxed">
+
+              <p>Um processo transita entre três estados fundamentais ao longo de sua vida. A distinção mais importante é entre os dois primeiros: nos estados <strong class="text-primary">Em Execução</strong> e <strong class="text-primary">Pronto</strong>, o processo está disposto a executar — a diferença é apenas a disponibilidade da CPU. O estado <strong class="text-primary">Bloqueado</strong> é fundamentalmente diferente: o processo não pode executar mesmo que a CPU esteja ociosa.</p>
+
+              <div class="grid grid-cols-1 gap-2">
                 <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
-                  <span class="w-2 h-2 bg-secondary rounded-full mt-1.5 flex-shrink-0"></span>
-                  <div><strong class="text-primary">Novo (New)</strong> — processo foi criado</div>
+                  <span class="w-2 h-2 bg-tertiary rounded-full mt-1.5 flex-shrink-0"></span>
+                  <div><strong class="text-primary">Em Execução (Running)</strong> — usando a CPU naquele instante.</div>
                 </div>
                 <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
                   <span class="w-2 h-2 bg-primary rounded-full mt-1.5 flex-shrink-0"></span>
-                  <div><strong class="text-primary">Pronto (Ready)</strong> — aguardando a CPU</div>
-                </div>
-                <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
-                  <span class="w-2 h-2 bg-tertiary rounded-full mt-1.5 flex-shrink-0"></span>
-                  <div><strong class="text-primary">Executando (Running)</strong> — usando a CPU agora</div>
+                  <div><strong class="text-primary">Pronto (Ready)</strong> — apto a executar, aguardando a CPU ser alocada pelo escalonador.</div>
                 </div>
                 <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
                   <span class="w-2 h-2 bg-outline rounded-full mt-1.5 flex-shrink-0"></span>
-                  <div><strong class="text-primary">Bloqueado (Waiting)</strong> — esperando I/O ou evento</div>
-                </div>
-                <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
-                  <span class="w-2 h-2 bg-error rounded-full mt-1.5 flex-shrink-0"></span>
-                  <div><strong class="text-primary">Terminado (Terminated)</strong> — execução concluída</div>
+                  <div><strong class="text-primary">Bloqueado (Waiting)</strong> — incapaz de executar até que um evento externo aconteça, como a chegada de uma entrada.</div>
                 </div>
               </div>
+
+              <!-- DIAGRAMA DE TRANSIÇÕES -->
+              <div>
+                <div class="text-xs text-tertiary font-bold uppercase tracking-wider mb-3">Diagrama de Transições</div>
+
+                <!-- ESPAÇO PARA IMAGEM -->
+                <div class="bg-surface-container-low border border-outline-variant/30 border-dashed rounded-xl flex items-center justify-center h-48 mb-3">
+                  <span class="text-on-surface-variant text-xs font-label">[ inserir diagrama aqui ]</span>
+                </div>
+
+                <div class="space-y-2">
+                  <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
+                    <span class="text-secondary font-headline font-bold text-sm w-4 flex-shrink-0">1</span>
+                    <div><strong class="text-primary">Running → Blocked</strong> — o processo não pode continuar; está esperando por uma entrada ou evento. Causada pelo <em>próprio processo</em>.</div>
+                  </div>
+                  <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
+                    <span class="text-secondary font-headline font-bold text-sm w-4 flex-shrink-0">2</span>
+                    <div><strong class="text-primary">Running → Ready</strong> — o escalonador decide que o processo usou CPU por tempo suficiente. Causada pelo <em>escalonador</em>, sem que o processo saiba.</div>
+                  </div>
+                  <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
+                    <span class="text-secondary font-headline font-bold text-sm w-4 flex-shrink-0">3</span>
+                    <div><strong class="text-primary">Ready → Running</strong> — o escalonador seleciona este processo para receber a CPU. Também causada pelo <em>escalonador</em>.</div>
+                  </div>
+                  <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
+                    <span class="text-secondary font-headline font-bold text-sm w-4 flex-shrink-0">4</span>
+                    <div><strong class="text-primary">Blocked → Ready</strong> — o evento esperado ocorreu. O processo volta à fila de prontos e aguarda o escalonador selecioná-lo.</div>
+                  </div>
+                </div>
+              </div>
+
+              <p class="text-xs text-on-surface-variant bg-surface-container-low rounded-lg p-3">
+                <strong class="text-primary">Nota:</strong> repare que não existe transição direta de Bloqueado para Em Execução — o processo sempre passa pelo estado Pronto antes de receber a CPU novamente.
+              </p>
+
             </div>
           </div>
         </div>
