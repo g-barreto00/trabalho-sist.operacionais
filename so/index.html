@@ -371,47 +371,89 @@
         </div>
 
         <div class="bg-surface-container-lowest border border-outline-variant/25 rounded-xl overflow-hidden">
-          <button onclick="toggleAcc(this)" class="w-full flex items-center justify-between p-6 text-left">
-            <div class="flex items-center gap-4">
-              <span class="w-8 h-8 bg-primary/8 rounded-lg flex items-center justify-center flex-shrink-0">
-                <span class="text-secondary font-headline font-bold text-sm">03</span>
-              </span>
-              <span class="font-headline text-primary text-lg">Troca de Contexto</span>
+        <button onclick="toggleAcc(this)" class="w-full flex items-center justify-between p-6 text-left">
+          <div class="flex items-center gap-4">
+            <span class="w-8 h-8 bg-primary/8 rounded-lg flex items-center justify-center flex-shrink-0">
+              <span class="text-secondary font-headline font-bold text-sm">03</span>
+            </span>
+            <span class="font-headline text-primary text-lg">Troca de Contexto</span>
+          </div>
+          <span class="material-symbols-outlined acc-arrow text-on-surface-variant text-xl">expand_more</span>
+        </button>
+        <div class="acc-body px-6 pb-6">
+          <div class="pl-12 space-y-4 text-on-surface-variant font-body text-sm leading-relaxed">
+
+            <p>Quando o escalonador decide trocar o processo em execução, o SO realiza uma <strong class="text-primary">troca de contexto</strong>: salva o estado do processo atual e restaura o estado do próximo. Esse mecanismo é o que permite a ilusão de que vários processos executam simultaneamente.</p>
+
+            <div class="grid grid-cols-1 gap-2">
+              <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
+                <span class="w-2 h-2 bg-tertiary rounded-full mt-1.5 flex-shrink-0"></span>
+                <div><strong class="text-primary">Registradores gerais</strong> — valores que o processo estava usando na CPU.</div>
+              </div>
+              <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
+                <span class="w-2 h-2 bg-primary rounded-full mt-1.5 flex-shrink-0"></span>
+                <div><strong class="text-primary">Contador de programa</strong> — qual instrução executar quando o processo voltar.</div>
+              </div>
+              <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
+                <span class="w-2 h-2 bg-secondary rounded-full mt-1.5 flex-shrink-0"></span>
+                <div><strong class="text-primary">Ponteiro de pilha</strong> — posição atual da pilha de execução.</div>
+              </div>
+              <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
+                <span class="w-2 h-2 bg-outline rounded-full mt-1.5 flex-shrink-0"></span>
+                <div><strong class="text-primary">Palavra de estado (PSW)</strong> — flags e modo de execução do processo.</div>
+              </div>
             </div>
-            <span class="material-symbols-outlined acc-arrow text-on-surface-variant text-xl">expand_more</span>
-          </button>
-          <div class="acc-body px-6 pb-6">
-            <div class="pl-12 space-y-3 text-on-surface-variant font-body text-sm leading-relaxed">
-              <p>Quando a CPU passa de um processo para outro, o SO precisa salvar o estado do processo atual e restaurar o estado do próximo. Esse mecanismo é chamado de <strong class="text-primary">troca de contexto (context switch)</strong>.</p>
-              <p>O estado salvo inclui: registradores, contador de programa, ponteiro de pilha e flags. A troca de contexto tem custo — tempo em que a CPU não executa trabalho útil.</p>
+
+            <!-- SEQUÊNCIA DA TROCA -->
+            <div>
+              <div class="text-xs text-tertiary font-bold uppercase tracking-wider mb-3">Como ocorre na prática</div>
+              <div class="space-y-2">
+                <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
+                  <span class="text-secondary font-headline font-bold text-sm w-4 flex-shrink-0">1</span>
+                  <div>O hardware salva o contador de programa na pilha ao detectar a interrupção.</div>
+                </div>
+                <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
+                  <span class="text-secondary font-headline font-bold text-sm w-4 flex-shrink-0">2</span>
+                  <div>Uma rotina em linguagem de montagem salva os registradores na <strong class="text-primary">tabela de processos</strong>.</div>
+                </div>
+                <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
+                  <span class="text-secondary font-headline font-bold text-sm w-4 flex-shrink-0">3</span>
+                  <div>O escalonador decide qual processo executará a seguir.</div>
+                </div>
+                <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
+                  <span class="text-secondary font-headline font-bold text-sm w-4 flex-shrink-0">4</span>
+                  <div>Os registradores e o mapa de memória do novo processo são carregados — e ele retoma de onde parou.</div>
+                </div>
+              </div>
             </div>
+
+            <p class="text-xs text-on-surface-variant bg-surface-container-low rounded-lg p-3">
+              <strong class="text-primary">Custo:</strong> durante a troca, a CPU não executa trabalho útil. Além disso, o cache e a TLB podem ser invalidados, forçando recarregamentos da memória — por isso trocas de contexto em excesso prejudicam o desempenho.
+            </p>
+
           </div>
         </div>
-
+      </div>
       </div>
 
-      <!-- Info lateral -->
-      <div class="bg-surface-container-low rounded-xl p-6 border border-outline-variant/20 self-start">
-        <div class="text-tertiary font-label text-xs uppercase tracking-wider mb-5">Hierarquia de Processos</div>
-        <div class="space-y-4 text-sm font-body text-on-surface-variant">
-          <div class="bg-surface-container-lowest rounded-lg p-4">
-            <div class="font-headline text-primary font-bold mb-1">fork()</div>
-            Cria um processo filho idêntico ao pai. Pai e filho executam de forma independente após o fork.
-          </div>
-          <div class="bg-surface-container-lowest rounded-lg p-4">
-            <div class="font-headline text-primary font-bold mb-1">exec()</div>
-            Substitui o código do processo atual por um novo programa. Usado após <code>fork()</code> para executar um programa diferente.
-          </div>
-          <div class="bg-surface-container-lowest rounded-lg p-4">
-            <div class="font-headline text-primary font-bold mb-1">wait()</div>
-            Processo pai espera o filho terminar. Evita processos <em>zombie</em> (processos terminados sem coleta do status).
-          </div>
-        </div>
-      </div>
-
+<div class="bg-surface-container-low rounded-xl p-6 border border-outline-variant/20 self-start">
+  <div class="text-tertiary font-label text-xs uppercase tracking-wider mb-5">Hierarquia de Processos</div>
+  <div class="space-y-4 text-sm font-body text-on-surface-variant">
+    <div class="bg-surface-container-lowest rounded-lg p-4">
+      <div class="font-headline text-primary font-bold mb-1">fork()</div>
+      Cria uma cópia exata do processo pai — memória, registradores, arquivos abertos e tudo mais. Após o fork, pai e filho seguem caminhos independentes. O retorno é <code>0</code> no filho e o <strong>PID do filho</strong> no pai, permitindo que cada um saiba seu papel.
+    </div>
+    <div class="bg-surface-container-lowest rounded-lg p-4">
+      <div class="font-headline text-primary font-bold mb-1">exec()</div>
+      Substitui a imagem de memória do processo atual por um novo programa. Usado logo após <code>fork()</code> quando o filho precisa executar algo diferente do pai — é assim que o shell executa comandos.
+    </div>
+    
+    <div class="bg-surface-container-lowest rounded-lg p-4 border border-outline-variant/30">
+      <div class="font-headline text-primary font-bold mb-1">init</div>
+      Processo raiz de todo o sistema UNIX. Ao inicializar, cria processos para cada terminal e é ancestral de <strong>todos</strong> os processos em execução — formando uma única árvore.
     </div>
   </div>
-</section>
+</div></section>
 
 
 <!-- ══════════════════ THREADS ══════════════════ -->
