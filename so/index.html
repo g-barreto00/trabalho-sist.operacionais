@@ -535,7 +535,7 @@
       </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 
       <!-- FIFO -->
       <div class="bg-surface-container-lowest border border-outline-variant/25 rounded-xl overflow-hidden">
@@ -574,20 +574,21 @@
               <div class="px-4 py-2 border-b border-outline-variant/20">
                 <span class="text-xs font-label font-bold text-primary/60 uppercase tracking-wider">Python</span>
               </div>
-              <pre class="p-4 text-xs font-mono text-on-surface leading-5 overflow-x-auto m-0">def fcfs(processos):
-    fila = sorted(processos, key=lambda p: p.chegada)
-    tempo = 0
-    gantt = []
+              <pre class="p-4 text-xs font-mono text-on-surface leading-5 overflow-x-auto m-0">def fcfs(arrival, burst):
+    n = len(arrival)
+    order = sorted(range(n), key=lambda i: arrival[i])
 
-    for p in fila:
-        if tempo &lt; p.chegada:          # CPU ociosa
-            tempo = p.chegada
-        p.inicio = tempo
-        tempo += p.execucao            # executa sem interrupção
-        p.fim = tempo
-        gantt.append({'pid': p.pid, 'inicio': p.inicio, 'fim': p.fim})
+    start = [0] * n
+    finish = [0] * n
+    time = 0
 
-    return gantt</pre>
+    for i in order:
+        time = max(time, arrival[i])
+        start[i] = time
+        time += burst[i]
+        finish[i] = time
+
+    return start, finish</pre>
             </div>
           </div>
         </div>
@@ -630,28 +631,32 @@
               <div class="px-4 py-2 border-b border-outline-variant/20">
                 <span class="text-xs font-label font-bold text-primary/60 uppercase tracking-wider">Python</span>
               </div>
-              <pre class="p-4 text-xs font-mono text-on-surface leading-5 overflow-x-auto m-0">def sjf(processos):
-    pendentes = sorted(processos, key=lambda p: p.chegada)
-    prontos, tempo, gantt = [], 0, []
+              <pre class="p-4 text-xs font-mono text-on-surface leading-5 overflow-x-auto m-0">def sjf(arrival, burst):
+    n = len(arrival)
+    done = [False] * n
+    start = [0] * n
+    finish = [0] * n
+    time = 0
+    completed = 0
 
-    while pendentes or prontos:
-        # Move os que chegaram para a fila de prontos
-        prontos += [p for p in pendentes if p.chegada &lt;= tempo]
-        pendentes = [p for p in pendentes if p.chegada &gt; tempo]
+    while completed &lt; n:
+        idx = -1
+        for i in range(n):
+            if not done[i] and arrival[i] &lt;= time:
+                if idx == -1 or burst[i] &lt; burst[idx]:
+                    idx = i
 
-        if not prontos:               # CPU ociosa
-            tempo = pendentes[0].chegada
+        if idx == -1:
+            time = min(arrival[i] for i in range(n) if not done[i])
             continue
 
-        # Seleciona o menor burst (não-preemptivo)
-        p = min(prontos, key=lambda x: x.execucao)
-        prontos.remove(p)
-        p.inicio = tempo
-        tempo += p.execucao
-        p.fim = tempo
-        gantt.append({'pid': p.pid, 'inicio': p.inicio, 'fim': p.fim})
+        start[idx] = time
+        time += burst[idx]
+        finish[idx] = time
+        done[idx] = True
+        completed += 1
 
-    return gantt</pre>
+    return start, finish</pre>
             </div>
           </div>
         </div>
@@ -679,36 +684,28 @@
               <div class="px-4 py-2 border-b border-outline-variant/20">
                 <span class="text-xs font-label font-bold text-primary/60 uppercase tracking-wider">Python</span>
               </div>
-              <pre class="p-4 text-xs font-mono text-on-surface leading-5 overflow-x-auto m-0">def prioridade_preemptiva(processos):
-    pendentes = sorted(processos, key=lambda p: p.chegada)
-    prontos, tempo, gantt = [], 0, []
-    atual = None
-    restante = {p.pid: p.execucao for p in processos}
+              <pre class="p-4 text-xs font-mono text-on-surface leading-5 overflow-x-auto m-0">def priority_preemptive(arrival, burst, priority):
+    n = len(arrival)
+    remaining = burst[:]
+    time = 0
+    gantt = []
 
-    while pendentes or prontos or atual:
-        prontos += [p for p in pendentes if p.chegada &lt;= tempo]
-        pendentes = [p for p in pendentes if p.chegada &gt; tempo]
+    while any(r &gt; 0 for r in remaining):
+        ready = [i for i in range(n) if arrival[i] &lt;= time and remaining[i] &gt; 0]
 
-        if atual is None and prontos:
-            atual = min(prontos, key=lambda p: p.prioridade)
-            prontos.remove(atual)
+        if not ready:
+            time += 1
+            continue
 
-        # Verifica preempção: chegou alguém mais prioritário?
-        if prontos and atual:
-            melhor = min(prontos, key=lambda p: p.prioridade)
-            if melhor.prioridade &lt; atual.prioridade:
-                prontos.append(atual)
-                atual = melhor
-                prontos.remove(melhor)
+        chosen = min(ready, key=lambda i: priority[i])
 
-        if atual:
-            gantt.append({'pid': atual.pid, 'inicio': tempo, 'fim': tempo + 1})
-            restante[atual.pid] -= 1
-            tempo += 1
-            if restante[atual.pid] == 0:
-                atual = None
+        if gantt and gantt[-1][0] == chosen:
+            gantt[-1] = (chosen, gantt[-1][1], gantt[-1][2] + 1)
         else:
-            tempo += 1   # CPU ociosa
+            gantt.append((chosen, time, time + 1))
+
+        remaining[chosen] -= 1
+        time += 1
 
     return gantt</pre>
             </div>
@@ -742,31 +739,36 @@
               <div class="px-4 py-2 border-b border-outline-variant/20">
                 <span class="text-xs font-label font-bold text-primary/60 uppercase tracking-wider">Python</span>
               </div>
-              <pre class="p-4 text-xs font-mono text-on-surface leading-5 overflow-x-auto m-0">def round_robin(processos, quantum):
-    pendentes = sorted(processos, key=lambda p: p.chegada)
-    fila, tempo, gantt = [], 0, []
-    restante = {p.pid: p.execucao for p in processos}
+              <pre class="p-4 text-xs font-mono text-on-surface leading-5 overflow-x-auto m-0">def round_robin(arrival, burst, quantum):
+    n = len(arrival)
+    remaining = burst[:]
+    order = sorted(range(n), key=lambda i: arrival[i])
+    queue = []
+    time = 0
+    gantt = []
+    pos = 0
 
-    while pendentes or fila:
-        fila += [p for p in pendentes if p.chegada &lt;= tempo]
-        pendentes = [p for p in pendentes if p.chegada &gt; tempo]
+    while pos &lt; n or queue:
+        while pos &lt; n and arrival[order[pos]] &lt;= time:
+            queue.append(order[pos])
+            pos += 1
 
-        if not fila:                  # CPU ociosa
-            tempo = pendentes[0].chegada
+        if not queue:
+            time = arrival[order[pos]]
             continue
 
-        p = fila.pop(0)               # FIFO dentro da fila circular
-        fatia = min(quantum, restante[p.pid])
-        gantt.append({'pid': p.pid, 'inicio': tempo, 'fim': tempo + fatia})
-        tempo += fatia
-        restante[p.pid] -= fatia
+        i = queue.pop(0)
+        fatia = min(quantum, remaining[i])
+        gantt.append((i, time, time + fatia))
+        time += fatia
+        remaining[i] -= fatia
 
-        # Coleta chegadas durante a fatia
-        fila += [x for x in pendentes if x.chegada &lt;= tempo]
-        pendentes = [x for x in pendentes if x.chegada &gt; tempo]
+        while pos &lt; n and arrival[order[pos]] &lt;= time:
+            queue.append(order[pos])
+            pos += 1
 
-        if restante[p.pid] &gt; 0:      # Não terminou → volta para o fim da fila
-            fila.append(p)
+        if remaining[i] &gt; 0:
+            queue.append(i)
 
     return gantt</pre>
             </div>
@@ -814,40 +816,28 @@
               <div class="px-4 py-2 border-b border-outline-variant/20">
                 <span class="text-xs font-label font-bold text-primary/60 uppercase tracking-wider">Python</span>
               </div>
-              <pre class="p-4 text-xs font-mono text-on-surface leading-5 overflow-x-auto m-0">def edf(processos):
-    pendentes = sorted(processos, key=lambda p: p.chegada)
-    prontos, tempo, gantt = [], 0, []
-    atual = None
-    restante = {p.pid: p.execucao for p in processos}
-    INF = float('inf')
+              <pre class="p-4 text-xs font-mono text-on-surface leading-5 overflow-x-auto m-0">def edf(arrival, burst, deadline):
+    n = len(arrival)
+    remaining = burst[:]
+    time = 0
+    gantt = []
 
-    while pendentes or prontos or atual:
-        prontos += [p for p in pendentes if p.chegada &lt;= tempo]
-        pendentes = [p for p in pendentes if p.chegada &gt; tempo]
+    while any(r &gt; 0 for r in remaining):
+        ready = [i for i in range(n) if arrival[i] &lt;= time and remaining[i] &gt; 0]
 
-        if atual is None and prontos:
-            # Menor deadline primeiro
-            atual = min(prontos, key=lambda p: p.deadline or INF)
-            prontos.remove(atual)
+        if not ready:
+            time += 1
+            continue
 
-        # Verifica preempção: chegou alguém com deadline mais urgente?
-        if prontos and atual:
-            urgente = min(prontos, key=lambda p: p.deadline or INF)
-            dl_urgente = urgente.deadline or INF
-            dl_atual   = atual.deadline   or INF
-            if dl_urgente &lt; dl_atual:
-                prontos.append(atual)
-                atual = urgente
-                prontos.remove(urgente)
+        chosen = min(ready, key=lambda i: deadline[i])
 
-        if atual:
-            gantt.append({'pid': atual.pid, 'inicio': tempo, 'fim': tempo + 1})
-            restante[atual.pid] -= 1
-            tempo += 1
-            if restante[atual.pid] == 0:
-                atual = None
+        if gantt and gantt[-1][0] == chosen:
+            gantt[-1] = (chosen, gantt[-1][1], gantt[-1][2] + 1)
         else:
-            tempo += 1   # CPU ociosa
+            gantt.append((chosen, time, time + 1))
+
+        remaining[chosen] -= 1
+        time += 1
 
     return gantt</pre>
             </div>
