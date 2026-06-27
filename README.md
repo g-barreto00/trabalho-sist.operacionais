@@ -2,223 +2,257 @@
 
 Portal centralizado de disciplinas do curso de Ciência da Computação da UFBA. Reúne conteúdo teórico, referências rápidas e simuladores interativos em um único lugar, desenvolvido e mantido pelos próprios alunos.
 
+> Para rodar: instale as dependências com `pip install -r requirements.txt` e execute `bash iniciar.sh` para subir o backend na porta 5001. O frontend é HTML estático e abre direto no navegador.
+
 ---
 
-## Estrutura do Projeto
+## Organização do Projeto
 
 ```
 /
 ├── index.html                          # Portal principal (Hub Acadêmico)
-├── iniciar.sh                          # Script de inicialização do backend
-├── requirements.txt                    # Dependências Python
+├── iniciar.sh                          # Sobe o backend Flask
+├── requirements.txt                    # flask, flask-cors
 │
-├── backend/                            # API Flask (simulador de SO)
-│   ├── app.py                          # Servidor e rotas
+├── backend/                            # API REST do simulador
+│   ├── app.py                          # Rotas /simular e /casos
 │   ├── models/
 │   │   └── processo.py                 # Dataclass Processo
 │   └── scheduler/
 │       ├── base.py                     # Métricas e utilitários compartilhados
-│       ├── fcfs.py                     # FIFO / First Come First Served
-│       ├── sjf.py                      # Shortest Job First
-│       ├── round_robin.py              # Round Robin
-│       ├── priority.py                 # Prioridade Preemptiva
-│       ├── edf.py                      # Earliest Deadline First
-│       ├── cfs.py                      # CFS-Sim (Completely Fair Scheduler)
-│       └── autoral.py                  # APS — Adaptive Priority Scoring
+│       ├── fcfs.py
+│       ├── sjf.py
+│       ├── round_robin.py
+│       ├── priority.py
+│       ├── edf.py
+│       ├── cfs.py
+│       └── autoral.py
 │
-├── casos/                              # Casos de teste em JSON
-│   ├── caso_base.json                  # Caso rico com 5 processos para demonstração
-│   ├── caso_spec.json                  # Caso base exato do enunciado do trabalho (3 processos)
-│   ├── caso_deadline.json              # Caso com deadlines apertados (alguns estouram)
-│   └── caso_ociosidade.json            # Caso com processos espaçados (valida CPU idle)
+├── casos/                              # Cenários de teste em JSON
+│   ├── caso_spec.json
+│   ├── caso_base.json
+│   ├── caso_deadline.json
+│   └── caso_ociosidade.json
 │
-├── psb/                                # Disciplina: Programação de Software Básico
-│   ├── index.html                      # Página da disciplina
-│   └── img/                            # Imagens e diagramas
+├── psb/
+│   ├── index.html
+│   └── img/
 │
-└── so/                                 # Disciplina: Sistemas Operacionais
-    ├── index.html                      # Página da disciplina
-    ├── img/                            # Imagens e diagramas
+└── so/
+    ├── index.html
+    ├── img/
     └── simuladores/
         └── escalonamento/
-            ├── index.html              # Interface do simulador
-            ├── script.js               # Lógica de UI, Gantt e comunicação com a API
-            └── style.css               # Estilos do simulador
+            ├── index.html
+            ├── script.js
+            └── style.css
 ```
 
 ---
 
-## Como Rodar
+## Organização dos Arquivos
 
-O frontend é estático (HTML puro) e pode ser aberto diretamente no navegador. O backend Flask é necessário **apenas** para o simulador de escalonamento de SO.
+O projeto é dividido em três camadas independentes: o conteúdo estático (frontend), a lógica de simulação (backend) e os dados de teste (casos).
 
-### 1. Instalar dependências Python
+### Frontend
 
-```bash
-pip install -r requirements.txt
-```
+Todo o conteúdo das disciplinas — PSB e SO — é HTML estático puro, sem framework e sem build step. Cada disciplina tem sua própria pasta com um `index.html` autossuficiente. Os estilos usam Tailwind CSS carregado via CDN, o que elimina qualquer etapa de compilação. Os ícones vêm do Material Symbols do Google Fonts. As fontes Noto Serif (títulos) e Work Sans (corpo) também são carregadas via CDN.
 
-### 2. Iniciar o backend
+O simulador de escalonamento (`so/simuladores/escalonamento/`) é o único módulo com JavaScript não-trivial. O `script.js` cuida de três responsabilidades: gerenciar o estado da interface (processos adicionados, algoritmo selecionado), se comunicar com o backend via `fetch`, e renderizar os resultados — Gantt no canvas e tabela no DOM. O `style.css` é um arquivo separado específico do simulador, já que ele tem uma identidade visual própria (layout de duas colunas com sidebar) distinta das páginas de conteúdo.
 
-```bash
-bash iniciar.sh
-```
+### Backend
 
-O script sobe a API Flask na porta `5001` e exibe os endereços de acesso no terminal.
+O backend é uma API Flask mínima com duas rotas. Fica inteiramente dentro de `backend/` e não tem nenhum acoplamento com o frontend além do contrato JSON.
 
-### 3. Abrir no navegador
+`app.py` é o ponto de entrada. Ele define as duas rotas (`/simular` e `/casos`), faz o parse dos parâmetros recebidos, instancia os objetos `Processo` e delega para o scheduler correspondente. Não tem lógica de simulação — é só roteamento e serialização.
 
-Abra os arquivos HTML diretamente, ou sirva a raiz com qualquer servidor estático:
+`models/processo.py` define a dataclass `Processo` com os campos `pid`, `arrival`, `burst`, `deadline`, `priority` e `num_pages`. É o único tipo de dado que transita entre o app e os schedulers.
 
-```bash
-# exemplo com Python
-python3 -m http.server 8080
-```
+`scheduler/base.py` contém as funções utilitárias compartilhadas por todos os algoritmos: `compute_results()` calcula turnaround, espera e métricas globais a partir dos dados brutos; `merge_gantt()` une blocos consecutivos do mesmo processo para evitar fragmentação visual; `add_arrivals()` move processos da lista de pendentes para a fila de prontos conforme o tempo avança. Centralizar isso em `base.py` evita duplicação e garante que todos os algoritmos calculem métricas da mesma forma.
 
-| Página | Caminho |
-|---|---|
-| Portal (Hub) | `index.html` |
-| PSB | `psb/index.html` |
-| Sistemas Operacionais | `so/index.html` |
-| Simulador de Escalonamento | `so/simuladores/escalonamento/index.html` |
-
----
-
-## Disciplinas Disponíveis
-
-### PSB — Programação de Software Básico
-
-Conteúdo teórico sobre o microcontrolador **ATmega328P** e linguagem **Assembly AVR**.
-
-**Módulos de conteúdo:**
-
-- **Introdução** — arquitetura RISC/Harvard, especificações do ATmega328P (32 KB de programa, 2 KB SRAM, 131 instruções, 32 registradores de propósito geral)
-- **Registradores** — registradores de propósito geral (R0–R31), pares X/Y/Z para 16 bits, SREG (flags C, Z, N, V, S, H, T, I) e SP (Stack Pointer com SPH/SPL)
-- **Pinagem (PDIP-28)** — VCC, AVcc, AREF, GND e suas funções
-- **Instruções de Controle de Fluxo** — desvios incondicionais (JMP, RJMP, IJMP) e condicionais (CPI, CPC, CPSE, BRxx com variantes BREQ, BRNE, BRLO, BRSH, BRLT, BRGE, BRVS, BRVC)
-
-**Referência rápida X86 → AVR:** tabela interativa com acordeão mostrando equivalências de MOV, ADD, SUB, INC, DEC, PUSH e POP em código AVR.
-
-**Laboratório SimulIDE:** guia passo a passo para compilar código Assembly (via AVRA no Linux ou Microchip Studio no Windows), gerar o `.hex` e carregar no ATmega328P simulado. Inclui link para playlist no YouTube.
-
-**Instruções de Base (exemplos práticos com circuitos):**
-
-| # | Exemplo | Descrição |
-|---|---|---|
-| 01 | LED-VCC | Liga LED usando `LDI` + `OUT PORTD` com pino como VCC |
-| 02 | LED-GND | Liga LED com pino como GND (lógica invertida) |
-| 03 | Blink | LED piscando com rotina de atraso de ~1s (3 laços aninhados, 16 MHz) |
-| 04 | Contador 4 bits | Conta de 0 a 15 em binário nos pinos de PORTD |
-| 05 | Contador Decimal | Contador 0–9 com decodificação BCD em PORTB |
-
----
-
-### SO — Sistemas Operacionais
-
-Conteúdo teórico sobre os mecanismos que gerenciam hardware e fornecem serviços a programas de aplicação.
-
-**Módulos de conteúdo:**
-
-**Processos**
-- O que é um processo (programa estático vs. instância em execução, analogia do cientista/receita de Tanenbaum)
-- Componentes internos: código (text), dados (data/heap), pilha (stack) e PCB
-- Multiprogramação e ilusão de paralelismo
-- Estados: Running → Blocked → Ready → Running (diagrama de transições com imagem)
-- Troca de contexto: o que é salvo (registradores, PC, SP, PSW), custo de cache/TLB
-- Hierarquia de processos: `fork()`, `exec()`, `init`
-
-**Threads**
-- Diferença entre processo e thread (espaço de endereçamento isolado vs. compartilhado)
-- Modelos: Many-to-One, One-to-One (Linux/Windows), Many-to-Many
-- Sincronização: condições de corrida, Mutex, Semáforo, Monitor
-
-**Algoritmos de Escalonamento** (com pseudocódigo Python para cada um):
-- FIFO/FCFS — não preemptivo, efeito comboio
-- SJF — não preemptivo, minimiza espera média, starvation de processos longos
-- Prioridade — preemptivo, aging como solução para starvation
-- Round Robin — quantum fixo, preemptivo, base dos sistemas de tempo compartilhado
-- EDF — preemptivo, ótimo para tempo real, falha catastrófica sob sobrecarga
-
-**Tabela comparativa:** FIFO, SJF, Prioridade, Round Robin e EDF lado a lado com preemptividade, espera média, starvation e uso típico.
-
----
-
-## Simulador de Escalonamento (SO)
-
-Ferramenta interativa que implementa e compara 7 algoritmos de escalonamento em uma CPU single-core simulada.
-
-### Algoritmos
-
-| Algoritmo | Tipo | Critério de seleção |
-|---|---|---|
-| FIFO / FCFS | Não preemptivo | Ordem de chegada |
-| SJF | Não preemptivo | Menor burst restante |
-| Round Robin | Preemptivo | Fila circular com quantum fixo |
-| Prioridade | Preemptivo | Menor número = maior prioridade |
-| EDF | Preemptivo | Deadline mais próximo |
-| CFS-Sim | Preemptivo | Menor `vruntime` (tempo virtual) |
-| APS (Autoral) | Preemptivo | Score composto: urgência (50%) + prioridade (30%) + aging (20%) |
-
-### Entradas
-
-**Por processo:** `id`, `chegada`, `execução`, `deadline` (opcional), `prioridade`, `páginas` (opcional, reservado)
-
-**Globais:** `quantum` e `sobrecarga de contexto` (tempo de CPU ociosa adicionado em cada troca)
-
-### Funcionamento
-
-- A API Flask recebe os parâmetros via POST em `/simular` e devolve o gantt, métricas por processo e métricas globais
-- Os casos de teste são servidos via GET em `/casos` e carregados automaticamente na sidebar
-- O frontend desenha o Gantt em canvas HTML5 e renderiza a tabela de resultados
-
-### CFS-Sim
-
-Implementação simplificada do Completely Fair Scheduler do kernel Linux. Cada processo mantém um `vruntime` que cresce proporcionalmente à sua prioridade:
-
-```
-vruntime += Δt × 1.25^(prioridade - 1)
-```
-
-Processo com menor `vruntime` sempre recebe a CPU. Ao chegar, um novo processo recebe o `vruntime` mínimo da fila de prontos (evita starvation de processos existentes). Sem quantum fixo — a fatia de cada processo emerge do reequilíbrio entre `vruntime`s.
-
-### APS — Adaptive Priority Scoring (algoritmo autoral)
-
-Escalonador heurístico que recalcula um score multi-critério a cada evento:
-
-- **Urgência (50%)** — slack entre deadline e burst restante; processos sem deadline usam heurística SJF
-- **Prioridade (30%)** — normalizada entre os processos prontos
-- **Aging (20%)** — tempo de espera acumulado, evita starvation
-
-O processo com maior score é escalonado a seguir. Preempção ocorre quando um novo chegante altera o ranking.
-
-### Saídas
-
-**Gráfico de Gantt** (canvas, com scroll horizontal para timelines longas):
-
-| Cor | Significado |
-|---|---|
-| Cor do processo | Execução normal |
-| Cinza `#c5c6d2` | CPU ociosa (nenhum processo pronto) |
-| Âmbar `#d97706` | Sobrecarga de contexto (troca de processo) |
-| Vermelho `#dc2626` | Bloco executado após deadline estourado |
-| Linha ouro `#bdab51` | Marcador de deadline absoluto (apenas EDF) |
-
-**Modo passo-a-passo:** navega evento a evento pelo Gantt com botões Anterior / Próximo / Ver tudo. Eventos futuros aparecem esmaecidos como preview. Métricas e tabela só são reveladas ao concluir todos os passos.
-
-**Métricas globais:** espera média, turnaround médio, throughput, % CPU ociosa, número de preempções e trocas de contexto.
-
-**Tabela por processo:** `chegada`, `execução`, `deadline`, `prioridade`, `início(s)`, `término`, `espera`, `turnaround`, `deadline OK?`
-
-**Modo comparação ("Comparar Todos"):** roda os 7 algoritmos simultaneamente, exibe abas com Gantt individual e tabela comparativa com ★ destacando o melhor valor em cada métrica.
+Cada arquivo em `scheduler/` implementa exatamente uma função pública — `run(processes, quantum, overhead)` — que retorna sempre o mesmo formato de dicionário. Essa interface uniforme é o que permite ao `app.py` chamar qualquer algoritmo de forma genérica e ao modo "Comparar Todos" rodar os sete em sequência sem código especial.
 
 ### Casos de Teste
 
-| Arquivo | Descrição |
+A pasta `casos/` contém arquivos JSON com cenários prontos. O backend os serve via `GET /casos` e o frontend os exibe como botões de atalho na sidebar do simulador. Cada arquivo tem um campo `descricao` que aparece como tooltip e os campos de configuração (`quantum`, `sobrecarga`) junto com a lista de processos — o mesmo formato aceito pelo endpoint `/simular`.
+
+---
+
+## Hub Acadêmico (`index.html`)
+
+Página de entrada do portal. Apresenta as disciplinas disponíveis em cards com status de disponibilidade. Cada card leva à página da respectiva disciplina.
+
+**Disciplinas ativas:** PSB e Sistemas Operacionais.
+
+**Planejadas (em breve):** Estruturas de Dados, Redes de Computadores, Arquitetura de Computadores — já aparecem na grade com estado desabilitado.
+
+A navegação entre Hub → Disciplina → Simulador é feita por links diretos entre arquivos HTML, sem roteamento dinâmico. O simulador exibe um breadcrumb fixo no topo (Hub Acadêmico → Sistemas Operacionais → Simulador de Escalonamento).
+
+---
+
+## Módulo PSB (`psb/index.html`)
+
+Cobre o conteúdo da disciplina de **Programação de Software Básico**, focado no microcontrolador ATmega328P e linguagem Assembly AVR.
+
+### Teoria e Conceitos
+
+Organizada em acordeões expansíveis com quatro tópicos:
+
+**Introdução** — apresenta a arquitetura RISC/Harvard do ATmega328P com suas especificações: 32 KB de memória de programa, 2 KB de SRAM, 1 KB de EEPROM, 131 instruções e 32 registradores de propósito geral. Explica a separação de memória de programa e dados da arquitetura Harvard, e o porquê de apenas LOAD/STORE acessarem a memória de dados.
+
+**Registradores** — detalha os registradores de propósito geral R0–R31, os pares de 16 bits X (R27:R26), Y (R29:R28) e Z (R31:R30), e os registradores de I/O interno mais importantes:
+- **SREG** (Status Register): 8 flags — C (carry), Z (zero), N (negativo), V (overflow signed), S (sinal lógico), H (half carry), T (temporário), I (interrupções globais)
+- **SP** (Stack Pointer): implementado em SPH e SPL, modelo Full Descending Stack
+
+**Pinagem PDIP-28** — tabela com os pinos essenciais: VCC (pino 7), AVcc (pino 20), AREF (pino 21) e GND (pinos 8 e 22), com suas funções de alimentação e referência analógica.
+
+**Instruções de Controle de Fluxo** — desvios incondicionais (JMP, RJMP, IJMP) com tamanho em palavras e ciclos de clock, e desvios condicionais via flags do SREG: instruções de comparação (CPI, CPC, CPSE) e as branches BRxx (BREQ, BRNE, BRLO, BRSH, BRLT, BRGE, BRVS, BRVC).
+
+### Referência Rápida X86 → AVR
+
+Sidebar interativa com acordeões mostrando a equivalência em código AVR para instruções comuns de x86: MOV, ADD, SUB, INC, DEC, PUSH e POP. Cada item exibe o snippet AVR correspondente com comentário explicativo.
+
+### Laboratório SimulIDE
+
+Guia de uso do simulador de circuitos eletrônicos SimulIDE com ATmega328P. Cobre o fluxo completo: escrita do código Assembly → compilação via AVRA (Linux) ou Microchip Studio (Windows) → geração do `.hex` → carregamento no SimulIDE via Load Firmware → execução. Acompanha playlist de videoaulas no YouTube linkada diretamente na página.
+
+### Instruções de Base
+
+Cinco exemplos práticos com código Assembly comentado e imagem do circuito no SimulIDE:
+
+| # | Exemplo | O que demonstra |
+|---|---|---|
+| 01 | LED-VCC | Configuração de DDRD + saída em PORTD com pino como VCC |
+| 02 | LED-GND | Mesma lógica com pino como GND (lógica invertida) |
+| 03 | Blink | Rotina de atraso de ~1s com três laços aninhados (82 × 255 × 255 × 3 ciclos a 16 MHz) usando DEC + BRNE |
+| 04 | Contador 4 bits | Contagem de 0 a 15 em PORTD com INC, CPI e BREQ para reset |
+| 05 | Contador Decimal | Contagem 0–9 em PORTB com decodificação BCD e subrotinas separadas de incrementar e atrasar |
+
+Cada exemplo usa o padrão de cards expansíveis com `max-height` animado e botão "Ver mais / Ver menos".
+
+---
+
+## Módulo SO (`so/index.html`)
+
+Cobre o conteúdo da disciplina de **Sistemas Operacionais**, organizado em quatro módulos sequenciais acessíveis pela navbar.
+
+### Módulo 01 — Conceitos Fundamentais
+
+Grade de quatro cards de navegação (Processos, Threads, Escalonamento, Simuladores) que ancoram às seções correspondentes da página. Funcionam como índice visual do conteúdo.
+
+### Módulo 02 — Processos
+
+Dividido em coluna de acordeões à esquerda e sidebar de hierarquia à direita.
+
+**Acordeões:**
+
+- **O que é um Processo** — distinção entre programa (estático, em disco) e processo (dinâmico, em execução). Usa a analogia de Tanenbaum do cientista/receita para ilustrar o conceito. Detalha os componentes internos: código (text), dados (data/heap), pilha (stack) e PCB. Explica multiprogramação como ilusão de paralelismo por alternância rápida de processos.
+
+- **Estados de um Processo** — três estados fundamentais (Running, Ready, Blocked) e as quatro transições possíveis entre eles, com diagrama de fluxo. Enfatiza que não existe transição direta de Blocked para Running.
+
+- **Troca de Contexto** — o que o SO salva ao trocar processos (registradores gerais, contador de programa, ponteiro de pilha, PSW) e a sequência de etapas da troca. Nota sobre o custo: cache e TLB podem ser invalidados, tornando trocas excessivas prejudiciais ao desempenho.
+
+**Sidebar:** explica `fork()` (cópia exata do processo pai, retorno diferente para pai e filho), `exec()` (substitui imagem de memória por novo programa) e `init` (raiz de todos os processos em sistemas UNIX).
+
+### Módulo 03 — Threads
+
+Grade 2×2 com quatro cards:
+
+- **Vantagens das Threads** — quatro benefícios fundamentais em relação a múltiplos processos: Responsividade (programa não trava enquanto uma thread bloqueia), Partilha de Recursos (comunicação direta via memória compartilhada), Economia (criação muito mais barata que um processo), Escalabilidade (paralelismo real em arquiteturas multicore).
+
+- **Processo vs Thread** — comparação direta de isolamento, velocidade de criação e necessidade de IPC. Inclui nota sobre Troca de Contexto: entre threads do mesmo processo não há troca de tabela de páginas nem limpeza da TLB, tornando a operação significativamente mais leve.
+
+- **Modelos de Thread** — organizado em duas seções. Tipos de implementação: Threads de Utilizador (geridas por biblioteca, kernel-agnostic, mas bloqueio paralisa o processo inteiro) e Threads de Kernel (geridas pelo SO, overhead maior, paralelismo real). Modelos de mapeamento: Many-to-One, One-to-One (Linux e Windows) e Many-to-Many.
+
+- **Sincronização** — condições de corrida e as três soluções clássicas: Mutex (exclusão mútua), Semáforo (controle por contador) e Monitor (abstração de alto nível com variáveis de condição).
+
+### Módulo 04 — Algoritmos de Escalonamento
+
+Grade 2×2 de acordeões com cinco algoritmos, cada um com descrição, tabela de vantagens/desvantagens e pseudocódigo Python. O código é intencionalmente didático — usa arrays simples em vez de classes, focando na lógica pura do algoritmo. Uma nota explica essa escolha no cabeçalho da seção.
+
+Os algoritmos cobertos: FIFO/FCFS, SJF, Prioridade (preemptivo com aging), Round Robin e EDF.
+
+**Tabela comparativa** ao final da seção: FIFO, SJF, Prioridade, Round Robin e EDF lado a lado com preemptividade, espera média esperada, risco de starvation e uso típico.
+
+### Seção de Simuladores
+
+Três cards: Escalonamento de Processos (ativo, leva ao simulador), Paginação de Memória (em breve) e Pipeline de Instruções (em breve).
+
+---
+
+## Simulador de Escalonamento (`so/simuladores/escalonamento/`)
+
+Ferramenta interativa que implementa sete algoritmos de escalonamento de processos em uma CPU single-core simulada. A simulação roda no backend Python e os resultados são visualizados no frontend via canvas HTML5.
+
+### Arquitetura
+
+O frontend (`index.html` + `script.js`) envia os parâmetros via POST para a API Flask (`backend/app.py`). O backend executa o algoritmo e devolve um objeto JSON com três campos: `gantt` (lista de eventos com tipo, pid, início e fim), `processes` (métricas por processo) e `metrics` (métricas globais). O frontend então renderiza o Gantt no canvas e popula a tabela de resultados.
+
+```
+[Frontend] → POST /simular → [Flask] → scheduler/X.py → JSON → [Frontend canvas + tabela]
+                                 ↑
+                GET /casos ──────┘  (carrega casos prontos da pasta /casos)
+```
+
+### Backend — Estrutura dos Schedulers
+
+Todos os algoritmos compartilham a mesma interface: `run(processes, quantum, overhead) → dict`. O módulo `base.py` fornece duas funções reutilizadas por todos:
+
+- `compute_results()` — calcula turnaround, espera, deadline_met e métricas globais a partir dos dados brutos da simulação
+- `merge_gantt()` — une blocos consecutivos do mesmo processo no Gantt para evitar fragmentação visual desnecessária
+
+Cada arquivo de scheduler é independente e implementa apenas a lógica de seleção e preempção do seu algoritmo.
+
+### Algoritmos Implementados
+
+| Algoritmo | Arquivo | Tipo | Critério |
+|---|---|---|---|
+| FIFO / FCFS | `fcfs.py` | Não preemptivo | Ordem de chegada |
+| SJF | `sjf.py` | Não preemptivo | Menor burst total |
+| Round Robin | `round_robin.py` | Preemptivo | Fila circular com quantum fixo |
+| Prioridade | `priority.py` | Preemptivo | Menor número = maior prioridade |
+| EDF | `edf.py` | Preemptivo | Deadline mais próximo |
+| CFS-Sim | `cfs.py` | Preemptivo | Menor `vruntime` |
+| APS (Autoral) | `autoral.py` | Preemptivo | Score composto |
+
+**CFS-Sim** é uma versão simplificada do Completely Fair Scheduler do kernel Linux. O `vruntime` de cada processo cresce conforme a fórmula `vruntime += Δt × 1.25^(prioridade - 1)` — processos de prioridade mais alta têm peso menor e crescem mais devagar, ganhando mais CPU ao longo do tempo. Ao chegar, um novo processo recebe o `vruntime` mínimo da fila (não o tempo atual), evitando que domine a CPU. Sem quantum fixo: a fatia emerge do reequilíbrio contínuo entre vruntimes.
+
+**APS (Adaptive Priority Scoring)** é o algoritmo autoral. A cada evento, calcula um score para cada processo pronto com três componentes: urgência de deadline (50%, baseada no slack entre prazo e burst restante), prioridade normalizada (30%) e aging (20%, tempo de espera acumulado para evitar starvation). O processo com maior score recebe a CPU. Preempção ocorre quando a chegada de um novo processo altera o ranking.
+
+### Entradas
+
+**Por processo:** `pid`, `chegada`, `execucao`, `deadline` (opcional), `prioridade`, `num_paginas` (campo reservado, não afeta a simulação)
+
+**Globais:** `quantum` (unidades de tempo por fatia no Round Robin) e `sobrecarga` (tempo de CPU ociosa inserido a cada troca de contexto)
+
+### Saídas e Visualizações
+
+**Gráfico de Gantt** renderizado em canvas HTML5, com scroll horizontal para timelines longas. Código de cores:
+
+| Cor | Elemento |
 |---|---|
-| `caso_spec.json` | 3 processos exatos do enunciado do trabalho (referência de validação) |
-| `caso_base.json` | 5 processos com chegadas e bursts variados, com deadlines |
-| `caso_deadline.json` | 5 processos com deadlines apertados — alguns estouram dependendo do algoritmo |
-| `caso_ociosidade.json` | 4 processos com grandes intervalos entre chegadas, força CPU idle |
+| Cor única por processo | Execução normal |
+| Cinza `#c5c6d2` | CPU ociosa |
+| Âmbar `#d97706` | Sobrecarga de contexto |
+| Vermelho `#dc2626` | Execução após deadline estourado |
+| Linha ouro `#bdab51` | Marcador de deadline (apenas EDF) |
+
+**Modo passo-a-passo:** o Gantt é navegado evento a evento. Eventos futuros aparecem esmaecidos como preview. Métricas e tabela de resultados são reveladas somente ao concluir a simulação completa.
+
+**Tabela de resultados por processo:** `chegada`, `execução`, `deadline`, `prioridade`, `início(s)`, `término`, `espera`, `turnaround`, `deadline OK?`
+
+**Métricas globais:** espera média, turnaround médio, throughput, % CPU ociosa, preempções e trocas de contexto.
+
+**Modo "Comparar Todos":** executa os sete algoritmos em paralelo no backend e exibe os resultados com abas individuais de Gantt e uma tabela comparativa com ★ destacando o melhor valor em cada métrica.
+
+### Casos de Teste
+
+| Arquivo | Processos | Foco |
+|---|---|---|
+| `caso_spec.json` | 3 | Caso base exato do enunciado (P1 burst=5 dl=8, P2 burst=4 dl=12, P3 burst=2 dl=20) |
+| `caso_base.json` | 5 | Cenário variado com diferentes bursts, chegadas e deadlines para demonstração geral |
+| `caso_deadline.json` | 5 | Deadlines apertados — alguns processos estouram dependendo do algoritmo escolhido |
+| `caso_ociosidade.json` | 4 | Processos com grandes intervalos entre chegadas, força períodos de CPU idle |
 
 ---
 
@@ -227,11 +261,11 @@ O processo com maior score é escalonado a seguir. Preempção ocorre quando um 
 | Camada | Tecnologia |
 |---|---|
 | Frontend | HTML5, Tailwind CSS (via CDN), JavaScript vanilla |
-| Canvas | HTML5 Canvas API (Gantt desenhado com 2D context) |
+| Gantt | HTML5 Canvas API com 2D context |
 | Backend | Python 3, Flask, flask-cors |
-| Fontes | Noto Serif (headlines), Work Sans (corpo), Material Symbols |
+| Tipografia | Noto Serif (headlines), Work Sans (corpo), Material Symbols (ícones) |
 
-Sem framework JS, sem build step — o frontend abre direto no navegador.
+Sem framework JS, sem build step. O frontend abre direto no navegador; o backend é necessário apenas para o simulador.
 
 ---
 

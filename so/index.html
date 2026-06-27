@@ -468,26 +468,67 @@
       </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
+      <!-- Vantagens das Threads -->
+      <div class="bg-surface-container-lowest rounded-xl p-7 border border-outline-variant/25">
+        <span class="material-symbols-outlined text-3xl text-secondary mb-4 block">bolt</span>
+        <h3 class="font-headline text-primary text-lg mb-3">Vantagens das Threads</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-4">
+          Por que usar threads em vez de múltiplos processos? Os livros clássicos destacam quatro benefícios fundamentais:
+        </p>
+        <div class="space-y-2 text-sm font-body text-on-surface-variant">
+          <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
+            <span class="w-2 h-2 bg-secondary rounded-full mt-1.5 flex-shrink-0"></span>
+            <div><strong class="text-primary">Responsividade</strong> — o programa continua a responder ao usuário mesmo que uma thread esteja bloqueada ou executando uma operação demorada.</div>
+          </div>
+          <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
+            <span class="w-2 h-2 bg-secondary rounded-full mt-1.5 flex-shrink-0"></span>
+            <div><strong class="text-primary">Partilha de Recursos</strong> — threads compartilham a memória e os recursos do processo por padrão, facilitando a comunicação entre elas.</div>
+          </div>
+          <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
+            <span class="w-2 h-2 bg-secondary rounded-full mt-1.5 flex-shrink-0"></span>
+            <div><strong class="text-primary">Economia</strong> — criação e gestão de threads consomem significativamente menos memória e tempo de CPU do que criar processos inteiros.</div>
+          </div>
+          <div class="bg-surface-container-low rounded-lg p-3 flex items-start gap-3">
+            <span class="w-2 h-2 bg-secondary rounded-full mt-1.5 flex-shrink-0"></span>
+            <div><strong class="text-primary">Escalabilidade</strong> — em arquiteturas multicore, threads podem correr em paralelo em diferentes núcleos, aumentando drasticamente o desempenho.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Processo vs Thread -->
       <div class="bg-surface-container-lowest rounded-xl p-7 border border-outline-variant/25">
         <span class="material-symbols-outlined text-3xl text-secondary mb-4 block">compare_arrows</span>
         <h3 class="font-headline text-primary text-lg mb-3">Processo vs Thread</h3>
         <p class="text-on-surface-variant text-sm leading-relaxed mb-4">
           Processos têm espaço de endereçamento independente. Threads de um mesmo processo <strong class="text-primary">compartilham memória</strong>, o que torna a comunicação mais rápida — mas exige sincronização cuidadosa.
         </p>
-        <div class="text-xs text-on-surface-variant bg-surface-container-low rounded-lg p-3">
+        <div class="text-xs text-on-surface-variant bg-surface-container-low rounded-lg p-3 mb-3">
           <div class="grid grid-cols-2 gap-2">
             <div><strong class="text-primary block mb-1">Processo</strong>Isolado<br/>Lento p/ criar<br/>IPC necessário</div>
             <div><strong class="text-secondary block mb-1">Thread</strong>Compartilhado<br/>Rápido p/ criar<br/>Memória direta</div>
           </div>
         </div>
+        <div class="bg-tertiary/8 border border-tertiary/20 rounded-lg p-3 text-xs text-on-surface-variant leading-relaxed">
+          <strong class="text-tertiary block mb-1">Nota — Troca de Contexto entre threads</strong>
+          A troca de contexto entre threads do mesmo processo é muito mais leve do que entre processos diferentes. Como compartilham o mesmo espaço de endereçamento, o SO não precisa trocar as tabelas de páginas nem limpar a <strong class="text-primary">TLB</strong> (Translation Lookaside Buffer), poupando tempo valioso de processamento.
+        </div>
       </div>
 
+      <!-- Modelos de Thread -->
       <div class="bg-surface-container-lowest rounded-xl p-7 border border-outline-variant/25">
         <span class="material-symbols-outlined text-3xl text-secondary mb-4 block">layers</span>
         <h3 class="font-headline text-primary text-lg mb-3">Modelos de Thread</h3>
         <div class="space-y-3 text-sm font-body text-on-surface-variant">
+          <div class="text-xs text-tertiary font-bold uppercase tracking-wider mb-1">Tipos de Implementação</div>
+          <div class="bg-surface-container-low rounded-lg p-3">
+            <strong class="text-primary">Threads de Utilizador</strong> — geridas por biblioteca, rápidas de criar, mas o bloqueio de uma paralisa todo o processo.
+          </div>
+          <div class="bg-surface-container-low rounded-lg p-3">
+            <strong class="text-primary">Threads de Kernel</strong> — geridas pelo SO, mais overhead na criação, mas permitem paralelismo real entre threads.
+          </div>
+          <div class="text-xs text-tertiary font-bold uppercase tracking-wider mt-2 mb-1">Modelos de Mapeamento</div>
           <div class="bg-surface-container-low rounded-lg p-3">
             <strong class="text-primary">Many-to-One</strong>
             <p class="mt-1">Várias threads de usuário mapeadas para um único thread de kernel. Simples, mas sem paralelismo real.</p>
@@ -503,6 +544,7 @@
         </div>
       </div>
 
+      <!-- Sincronização -->
       <div class="bg-surface-container-lowest rounded-xl p-7 border border-outline-variant/25">
         <span class="material-symbols-outlined text-3xl text-secondary mb-4 block">sync_lock</span>
         <h3 class="font-headline text-primary text-lg mb-3">Sincronização</h3>
@@ -946,7 +988,7 @@
         </div>
         <h3 class="text-xl font-headline text-on-surface-variant mb-3">Paginação de Memória</h3>
         <p class="text-on-surface-variant text-sm leading-relaxed mb-6">
-          Simulador de algoritmos de substituição de páginas: FIFO, LRU, Ótimo e Clock.
+          Simulador de algoritmos de substituição de páginas: FIFO, LRU...
         </p>
         <span class="text-xs bg-surface-container-high text-on-surface-variant px-3 py-1 rounded-full font-label">Em breve</span>
       </div>
@@ -958,7 +1000,7 @@
         </div>
         <h3 class="text-xl font-headline text-on-surface-variant mb-3">Pipeline de Instruções</h3>
         <p class="text-on-surface-variant text-sm leading-relaxed mb-6">
-          Visualize o pipeline de execução de instruções e identifique hazards e stalls.
+          Visualize o pipeline de execução de instruções.
         </p>
         <span class="text-xs bg-surface-container-high text-on-surface-variant px-3 py-1 rounded-full font-label">Em breve</span>
       </div>
