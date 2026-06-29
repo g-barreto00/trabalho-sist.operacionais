@@ -619,27 +619,16 @@
               </div>
               <pre class="p-4 text-xs font-mono text-on-surface leading-5 overflow-x-auto m-0">from collections import deque
 
-processos = [
-    {"pid": "P1", "chegada": 0, "burst": 5},
-    {"pid": "P2", "chegada": 1, "burst": 4},
-    {"pid": "P3", "chegada": 3, "burst": 2},
-]
-
-# Fila FIFO — ordena por chegada e processa em sequência
-fila  = deque(sorted(processos, key=lambda p: p["chegada"]))
-tempo = 0
+fila = deque(["P1", "P2", "P3"])
 
 while fila:
-    p      = fila.popleft()               # Retira o primeiro da fila
-    tempo  = max(tempo, p["chegada"])     # CPU pode ficar ociosa até a chegada
-    inicio = tempo
-    tempo += p["burst"]
-    print(f"{p['pid']}  início={inicio}  fim={tempo}")
+    proximo = fila.popleft()   # Primeiro que entrou, primeiro que sai
+    print(proximo)
 
 # Saída:
-# P1  início=0   fim=5
-# P2  início=5   fim=9
-# P3  início=9   fim=11</pre>
+# P1
+# P2
+# P3</pre>
             </div>
           </div>
         </div>
@@ -682,38 +671,17 @@ while fila:
               <div class="px-4 py-2 border-b border-outline-variant/20">
                 <span class="text-xs font-label font-bold text-primary/60 uppercase tracking-wider">Python</span>
               </div>
-              <pre class="p-4 text-xs font-mono text-on-surface leading-5 overflow-x-auto m-0">from collections import deque
+              <pre class="p-4 text-xs font-mono text-on-surface leading-5 overflow-x-auto m-0">prontos = [("P1", 5), ("P2", 4), ("P3", 2)]   # (processo, burst)
 
-processos = [
-    {"pid": "P1", "chegada": 0, "burst": 5},
-    {"pid": "P2", "chegada": 1, "burst": 4},
-    {"pid": "P3", "chegada": 3, "burst": 2},
-]
-
-pendentes = deque(sorted(processos, key=lambda p: p["chegada"]))
-prontos   = []    # Processos disponíveis para escalonamento
-tempo     = 0
-
-while pendentes or prontos:
-    # Mover para prontos os que já chegaram
-    while pendentes and pendentes[0]["chegada"] &lt;= tempo:
-        prontos.append(pendentes.popleft())
-
-    if not prontos:
-        tempo = pendentes[0]["chegada"]
-        continue
-
-    # Selecionar o de menor burst (Shortest Job First)
-    prontos.sort(key=lambda p: p["burst"])
-    p      = prontos.pop(0)
-    inicio = tempo
-    tempo += p["burst"]
-    print(f"{p['pid']}  burst={p['burst']}  início={inicio}  fim={tempo}")
+while prontos:
+    prontos.sort(key=lambda p: p[1])   # ordena pelo menor burst disponível
+    pid, burst = prontos.pop(0)        # escolhe o mais curto
+    print(pid)
 
 # Saída:
-# P1  burst=5  início=0   fim=5
-# P3  burst=2  início=5   fim=7   ← menor burst disponível em t=5
-# P2  burst=4  início=7   fim=11</pre>
+# P3   (burst 2)
+# P2   (burst 4)
+# P1   (burst 5)</pre>
             </div>
           </div>
         </div>
@@ -741,48 +709,17 @@ while pendentes or prontos:
               <div class="px-4 py-2 border-b border-outline-variant/20">
                 <span class="text-xs font-label font-bold text-primary/60 uppercase tracking-wider">Python</span>
               </div>
-              <pre class="p-4 text-xs font-mono text-on-surface leading-5 overflow-x-auto m-0">from collections import deque
+              <pre class="p-4 text-xs font-mono text-on-surface leading-5 overflow-x-auto m-0">prontos = [("P1", 2), ("P2", 1), ("P3", 3)]   # (processo, prioridade)
 
-processos = [
-    {"pid": "P1", "chegada": 0, "burst": 5, "prioridade": 2},
-    {"pid": "P2", "chegada": 1, "burst": 4, "prioridade": 1},  # maior prioridade
-    {"pid": "P3", "chegada": 3, "burst": 2, "prioridade": 3},
-]
-
-pendentes  = deque(sorted(processos, key=lambda p: p["chegada"]))
-restantes  = {p["pid"]: p["burst"] for p in processos}
-prontos    = []
-executando = None
-tempo      = 0
-
-while pendentes or prontos or executando:
-    while pendentes and pendentes[0]["chegada"] &lt;= tempo:
-        prontos.append(pendentes.popleft())
-
-    candidatos = prontos + ([executando] if executando else [])
-    if not candidatos:
-        tempo = pendentes[0]["chegada"]
-        continue
-
-    # Menor número = maior prioridade
-    proximo = min(candidatos, key=lambda p: p["prioridade"])
-
-    if executando and proximo["pid"] != executando["pid"]:
-        prontos.append(executando)    # Preempta e devolve à fila
-
-    prontos    = [p for p in prontos if p["pid"] != proximo["pid"]]
-    executando = proximo
-    restantes[executando["pid"]] -= 1
-    tempo += 1
-
-    if restantes[executando["pid"]] == 0:
-        print(f"{executando['pid']}  fim={tempo}")
-        executando = None
+while prontos:
+    prontos.sort(key=lambda p: p[1])   # menor número = maior prioridade
+    pid, prio = prontos.pop(0)         # escolhe o de maior prioridade
+    print(pid)
 
 # Saída:
-# P2  fim=5   ← preemptou P1 em t=1 por ter prioridade maior
-# P1  fim=10
-# P3  fim=12</pre>
+# P2   (prioridade 1)
+# P1   (prioridade 2)
+# P3   (prioridade 3)</pre>
             </div>
           </div>
         </div>
@@ -816,44 +753,23 @@ while pendentes or prontos or executando:
               </div>
               <pre class="p-4 text-xs font-mono text-on-surface leading-5 overflow-x-auto m-0">from collections import deque
 
-processos = [
-    {"pid": "P1", "chegada": 0, "burst": 5},
-    {"pid": "P2", "chegada": 1, "burst": 4},
-    {"pid": "P3", "chegada": 3, "burst": 2},
-]
+QUANTUM = 2
+fila    = deque([("P1", 5), ("P2", 4), ("P3", 2)])  # (processo, burst)
 
-QUANTUM   = 2
-pendentes = deque(sorted(processos, key=lambda p: p["chegada"]))
-restantes = {p["pid"]: p["burst"] for p in processos}
-fila      = deque()   # Fila circular de prontos
-tempo     = 0
+while fila:
+    pid, burst = fila.popleft()        # Retira o primeiro
+    fatia       = min(QUANTUM, burst)  # Executa no máximo QUANTUM unidades
+    burst      -= fatia
 
-while pendentes or fila:
-    while pendentes and pendentes[0]["chegada"] &lt;= tempo:
-        fila.append(pendentes.popleft())
-
-    if not fila:
-        tempo = pendentes[0]["chegada"]
-        continue
-
-    p     = fila.popleft()                          # Próximo da fila circular
-    fatia = min(QUANTUM, restantes[p["pid"]])
-    tempo += fatia
-    restantes[p["pid"]] -= fatia
-
-    # Admitir chegadas que ocorreram durante a fatia
-    while pendentes and pendentes[0]["chegada"] &lt;= tempo:
-        fila.append(pendentes.popleft())
-
-    if restantes[p["pid"]] &gt; 0:
-        fila.append(p)                              # Ainda tem burst → fim da fila
+    if burst &gt; 0:
+        fila.append((pid, burst))      # Ainda tem burst → volta ao fim da fila
     else:
-        print(f"{p['pid']}  fim={tempo}")
+        print(f"{pid} concluído")
 
-# Saída (quantum=2):
-# P3  fim=7
-# P2  fim=9
-# P1  fim=13</pre>
+# Saída:
+# P3 concluído
+# P2 concluído
+# P1 concluído</pre>
             </div>
           </div>
         </div>
@@ -899,49 +815,17 @@ while pendentes or fila:
               <div class="px-4 py-2 border-b border-outline-variant/20">
                 <span class="text-xs font-label font-bold text-primary/60 uppercase tracking-wider">Python</span>
               </div>
-              <pre class="p-4 text-xs font-mono text-on-surface leading-5 overflow-x-auto m-0">from collections import deque
+              <pre class="p-4 text-xs font-mono text-on-surface leading-5 overflow-x-auto m-0">prontos = [("P1", 8), ("P2", 12), ("P3", 5)]   # (processo, deadline)
 
-processos = [
-    {"pid": "P1", "chegada": 0, "burst": 5, "deadline": 8},
-    {"pid": "P2", "chegada": 1, "burst": 4, "deadline": 12},
-    {"pid": "P3", "chegada": 3, "burst": 2, "deadline": 20},
-]
-
-pendentes  = deque(sorted(processos, key=lambda p: p["chegada"]))
-restantes  = {p["pid"]: p["burst"] for p in processos}
-prontos    = []
-executando = None
-tempo      = 0
-
-while pendentes or prontos or executando:
-    while pendentes and pendentes[0]["chegada"] &lt;= tempo:
-        prontos.append(pendentes.popleft())
-
-    candidatos = prontos + ([executando] if executando else [])
-    if not candidatos:
-        tempo = pendentes[0]["chegada"]
-        continue
-
-    # Menor deadline = mais urgente (Earliest Deadline First)
-    proximo = min(candidatos, key=lambda p: p["deadline"])
-
-    if executando and proximo["pid"] != executando["pid"]:
-        prontos.append(executando)    # Preempta pelo deadline mais próximo
-
-    prontos    = [p for p in prontos if p["pid"] != proximo["pid"]]
-    executando = proximo
-    restantes[executando["pid"]] -= 1
-    tempo += 1
-
-    if restantes[executando["pid"]] == 0:
-        ok = "OK" if tempo &lt;= executando["deadline"] else "MISS"
-        print(f"{executando['pid']}  fim={tempo}  deadline={executando['deadline']}  {ok}")
-        executando = None
+while prontos:
+    pid, dl = min(prontos, key=lambda p: p[1])  # escolhe o menor deadline
+    prontos.remove((pid, dl))
+    print(f"{pid}  deadline={dl}")
 
 # Saída:
-# P1  fim=5   deadline=8   OK
-# P2  fim=10  deadline=12  OK
-# P3  fim=12  deadline=20  OK</pre>
+# P3  deadline=5
+# P1  deadline=8
+# P2  deadline=12</pre>
             </div>
           </div>
         </div>
