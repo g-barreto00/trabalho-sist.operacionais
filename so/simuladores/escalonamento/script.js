@@ -490,11 +490,17 @@ function drawGantt(gantt, procResults, maxStep, showDeadlines = true) {
   }
 
   // Deadline lines (só para algoritmos baseados em deadline)
-  const drawn = new Set();
-  if (showDeadlines) Object.values(procResults).forEach(pr => {
-    if (pr.deadline !== null && !drawn.has(pr.deadline)) {
-      drawn.add(pr.deadline);
-      const x = MARGIN_L + pr.deadline * PPU;
+  if (showDeadlines) {
+    const byDeadline = {};
+    Object.values(procResults).forEach(pr => {
+      if (pr.deadline !== null) {
+        if (!byDeadline[pr.deadline]) byDeadline[pr.deadline] = [];
+        byDeadline[pr.deadline].push(pr.pid);
+      }
+    });
+
+    Object.entries(byDeadline).forEach(([dl, pids]) => {
+      const x = MARGIN_L + Number(dl) * PPU;
       ctx.save();
       ctx.strokeStyle = DEADLINE_COLOR;
       ctx.lineWidth = 2;
@@ -511,9 +517,13 @@ function drawGantt(gantt, procResults, maxStep, showDeadlines = true) {
       ctx.lineTo(x, MARGIN_TOP - 1);
       ctx.closePath();
       ctx.fill();
+      ctx.font = 'bold 9px Work Sans, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText(pids.join(', '), x, MARGIN_TOP - 9);
       ctx.restore();
-    }
-  });
+    });
+  }
 
   // Time axis
   ctx.fillStyle = '#757682';
