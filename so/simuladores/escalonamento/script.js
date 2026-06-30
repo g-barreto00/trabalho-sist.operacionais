@@ -28,6 +28,7 @@ let simStep         = 0;
 let simMaxStep      = 0;
 let simStepMode     = false;
 let simShowDeadlines = false;
+let simScoreLog     = [];
 
 // Algoritmos que usam deadline como critério de escalonamento
 const DEADLINE_ALGORITHMS = new Set(['edf']);
@@ -50,6 +51,67 @@ const stepControls   = document.getElementById('stepControls');
 const stepLabel      = document.getElementById('stepLabel');
 const metricsDiv     = document.getElementById('metricsDiv');
 const resultTableDiv = document.getElementById('resultTableDiv');
+const apsScoreLog    = document.getElementById('apsScoreLog');
+const apsScoreBody   = document.getElementById('apsScoreBody');
+
+// ─── APS Score Log ───────────────────────────────────────────────
+function renderScoreLog(scoreLog) {
+  apsScoreBody.innerHTML = '';
+  scoreLog.forEach((decision, idx) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'aps-decision';
+    wrap.dataset.idx = idx;
+    wrap.style.cssText = 'margin-bottom:10px;opacity:0.25;transition:opacity .25s';
+
+    const header = document.createElement('div');
+    header.style.cssText = 'font-size:.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px';
+    header.textContent = `t = ${decision.time}`;
+    wrap.appendChild(header);
+
+    const table = document.createElement('table');
+    table.style.cssText = 'width:100%;border-collapse:collapse;font-size:.74rem';
+    table.innerHTML = `
+      <thead>
+        <tr style="color:var(--text-muted);border-bottom:1px solid var(--border)">
+          <th style="text-align:left;padding:2px 6px;font-weight:600">Processo</th>
+          <th style="text-align:center;padding:2px 6px;font-weight:600">Urgência ×0.5</th>
+          <th style="text-align:center;padding:2px 6px;font-weight:600">Prioridade ×0.3</th>
+          <th style="text-align:center;padding:2px 6px;font-weight:600">Aging ×0.2</th>
+          <th style="text-align:center;padding:2px 6px;font-weight:600">Score</th>
+        </tr>
+      </thead>`;
+    const tbody = document.createElement('tbody');
+    decision.scores.forEach(s => {
+      const chosen = s.pid === decision.chosen;
+      const tr = document.createElement('tr');
+      tr.style.cssText = chosen
+        ? 'background:var(--primary)/8%;font-weight:600'
+        : 'color:var(--text-muted)';
+      const star = chosen ? '★ ' : '　';
+      const scoreBar = (v, weight) => {
+        const contrib = (v * weight).toFixed(2);
+        return `<span style="font-family:monospace">${v.toFixed(2)}</span><span style="color:var(--text-muted);font-size:.68rem"> (+${contrib})</span>`;
+      };
+      tr.innerHTML = `
+        <td style="padding:3px 6px">${star}${s.pid}</td>
+        <td style="text-align:center;padding:3px 6px">${scoreBar(s.urgency,  0.5)}</td>
+        <td style="text-align:center;padding:3px 6px">${scoreBar(s.priority, 0.3)}</td>
+        <td style="text-align:center;padding:3px 6px">${scoreBar(s.aging,    0.2)}</td>
+        <td style="text-align:center;padding:3px 6px;font-weight:700;color:var(--primary)">${s.total.toFixed(2)}</td>`;
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    wrap.appendChild(table);
+    apsScoreBody.appendChild(wrap);
+  });
+}
+
+function updateScoreLogStep(currentTime) {
+  document.querySelectorAll('.aps-decision').forEach(el => {
+    const decisionTime = simScoreLog[+el.dataset.idx]?.time ?? Infinity;
+    el.style.opacity = decisionTime <= currentTime ? '1' : '0.2';
+  });
+}
 
 // ─── Utility ─────────────────────────────────────────────────────
 function toast(msg, type = '') {
@@ -258,10 +320,20 @@ function showSingleResult(data) {
   simMaxStep       = simGantt.length;
   simStepMode      = true;
   simShowDeadlines = showDeadlines;
+  simScoreLog      = data.score_log || [];
 
   metricsDiv.style.display     = 'none';
   resultTableDiv.style.display = 'none';
   stepControls.style.display   = 'flex';
+
+  // APS score log
+  if (data.algorithm === 'autoral' && simScoreLog.length > 0) {
+    apsScoreLog.style.display = 'block';
+    renderScoreLog(simScoreLog);
+    updateScoreLogStep(-1);
+  } else {
+    apsScoreLog.style.display = 'none';
+  }
 
   updateStepUI();
 }
@@ -297,6 +369,11 @@ function updateStepUI() {
   }
 
   drawGantt(simGantt, simProcs, simStep, simShowDeadlines);
+
+  if (simScoreLog.length > 0) {
+    const currentTime = simStep > 0 ? simGantt[simStep - 1].start : -1;
+    updateScoreLogStep(currentTime);
+  }
 }
 
 function prevStep() {

@@ -16,12 +16,10 @@ def _score(p, time, remaining, all_ready):
     if p.deadline is not None:
         slack = (p.deadline - time) - remaining[p.pid]
         if remaining[p.pid] > 0:
-            # Urgência normalizada: slack negativo → processo já atrasado (urgência máxima)
             urgency = max(0.0, min(2.0, 1.0 - slack / max(remaining[p.pid], 1)))
         else:
             urgency = 0.0
     else:
-        # Sem deadline: usa heurística SJF (trabalhos curtos têm mais urgência)
         max_rem = max((remaining[q.pid] for q in all_ready), default=1)
         urgency = 1.0 - remaining[p.pid] / max_rem if max_rem > 0 else 0.0
 
@@ -41,6 +39,44 @@ def _score(p, time, remaining, all_ready):
     return 0.50 * urgency + 0.30 * priority_score + 0.20 * aging
 
 
+def _score_detail(p, time, remaining, all_ready):
+    """Returns score breakdown dict for display in the frontend."""
+    if p.deadline is not None:
+        slack = (p.deadline - time) - remaining[p.pid]
+        urgency = max(0.0, min(2.0, 1.0 - slack / max(remaining[p.pid], 1))) if remaining[p.pid] > 0 else 0.0
+    else:
+        max_rem = max((remaining[q.pid] for q in all_ready), default=1)
+        urgency = 1.0 - remaining[p.pid] / max_rem if max_rem > 0 else 0.0
+
+    priorities = [q.priority for q in all_ready]
+    min_p, max_p = min(priorities), max(priorities)
+    priority_score = 1.0 if max_p == min_p else (max_p - p.priority) / (max_p - min_p)
+
+    wait = time - p.arrival
+    max_wait = max((time - q.arrival) for q in all_ready) if all_ready else 1
+    aging = wait / max_wait if max_wait > 0 else 0.0
+
+    total = 0.50 * urgency + 0.30 * priority_score + 0.20 * aging
+    return {
+        'pid':      p.pid,
+        'urgency':  round(urgency, 2),
+        'priority': round(priority_score, 2),
+        'aging':    round(aging, 2),
+        'total':    round(total, 2),
+    }
+
+
+def _log_decision(score_log, time, candidates, chosen, remaining):
+    score_log.append({
+        'time':    time,
+        'scores':  sorted(
+            [_score_detail(p, time, remaining, candidates) for p in candidates],
+            key=lambda d: -d['total']
+        ),
+        'chosen':  chosen.pid,
+    })
+
+
 def run(processes, quantum, overhead, **kwargs):
     """
     APS — Adaptive Priority Scheduling (algoritmo autoral, preemptivo).
@@ -52,6 +88,7 @@ def run(processes, quantum, overhead, **kwargs):
     remaining = {p.pid: p.burst for p in processes}
     start_times = {p.pid: [] for p in processes}
     end_times = {}
+    score_log = []
 
     pending = sorted(processes, key=lambda p: (p.arrival, p.pid))
     ready = []
@@ -76,6 +113,7 @@ def run(processes, quantum, overhead, **kwargs):
         if current is None and ready:
             all_candidates = ready[:]
             current = max(all_candidates, key=lambda p: _score(p, time, remaining, all_candidates))
+            _log_decision(score_log, time, all_candidates, current, remaining)
             ready.remove(current)
             start_times[current.pid].append(time)
 
@@ -102,7 +140,6 @@ def run(processes, quantum, overhead, **kwargs):
             last_pid = current.pid
             current = None
         else:
-            # Recalculate scores — maybe someone more urgent arrived
             if ready:
                 all_candidates = ready + [current]
                 best = max(all_candidates, key=lambda p: _score(p, time, remaining, all_candidates))
@@ -119,7 +156,10 @@ def run(processes, quantum, overhead, **kwargs):
                     context_switches += 1
                     all_c = ready[:]
                     current = max(all_c, key=lambda p: _score(p, time, remaining, all_c))
+                    _log_decision(score_log, time, all_c, current, remaining)
                     ready.remove(current)
                     start_times[current.pid].append(time)
 
-    return compute_results(processes, start_times, end_times, gantt, context_switches, preemptions)
+    result = compute_results(processes, start_times, end_times, gantt, context_switches, preemptions)
+    result['score_log'] = score_log
+    return result
